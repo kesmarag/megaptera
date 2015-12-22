@@ -45,25 +45,23 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                 Array(states, { Array(mixtures, { DoubleArray(D) }) })
         for (k in 0..states - 1) {
             for (m in 0..mixtures - 1) {
-                means[k][m] = kmeans.centroids[k + states * m]
+                means[k][m] = kmeans.centroids[k + states * m].clone()
                 //println(means[k][m].forEach { print("$it ") })
-                variances[k][m] = kmeans.variances[k + states * m]
+                variances[k][m] = kmeans.variances[k + states * m].clone()
                 //println(variances[k][m].forEach { print("$it ") })
 
             }
         }
         //means.forEach { println(it.forEach { it.forEach { println(it) } }) }
-        println(weights[0])
+        //println(weights[0])
         //kmeans.centroids.forEach { it.forEach { println(it) } }
         emissions = Array(states,
                 { k ->
-                    GaussianMixtureDensity(weights.clone(),
-                            means[k].clone(),
-                            variances[k].clone())
+                    GaussianMixtureDensity(weights.clone(),means[k].clone(),variances[k].clone())
 
                 })
 
-        //emissions.forEach { println(it.means[0][0]) }
+        //emissions.forEach { println("variances = ${it.variances[0][0]}") }
         //println("end of emissionsInit here...")
     }
 
@@ -94,9 +92,10 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
             var prevPost: Double = 0.0
 
             var iters: Int = 1
-            while (Math.abs((newPost - prevPost) / prevPost) > 3e-14 && iters <= 500 ) {
+            while (Math.abs((newPost - prevPost) / prevPost) > 3e-14 && iters <= 50 ) {
                 println(iters)
                 var post: Array<ForwardBackward?> = Array(members.size, { null })
+                //var post: Array<ForwardBackward?> = emptyArray()
                 var threadPool: ExecutorService = Executors.newFixedThreadPool(cores)
                 for (q in 0..members.size - 1) {
                     threadPool.execute(Runnable { post[q] = ForwardBackward(this, dataSet[members[q]]) })
@@ -134,7 +133,7 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
 
                 }
                 aij[j][k] = (sum2 / sum3)
-                //println("aij[$j][$k] = ${aij[j][k]}")
+                // println("aij[$j][$k] = ${aij[j][k]}")
             }
             pi[j] = sum / members.size.toDouble()
             // println(pi[j])
@@ -151,6 +150,14 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                     for (n in 0..fb[d]!!.observationSet.size - 1) {
                         c[k][m][d][n] = emissions[k].mixtureContribution(fb[d]!!.observationSet[n], m) *
                                 fb[d]!!.gamma[n][k]
+                        if ( emissions[k].mixtureContribution(fb[d]!!.observationSet[n], m).isNaN()){
+                            println("[k = $k][m = $m][d = $d][n = $n] ## NaN detected ##")
+                            //println(emissions[k].mixtureContribution(fb[d]!!.observationSet[n], m))
+
+                            //c[k][m][d][n] = fb[d]!!.gamma[n][k]
+
+                        }
+                        //println(emissions[k].mixtureContribution(fb[d]!!.observationSet[n], m))
                     }
                 }
             }
@@ -168,6 +175,7 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                         for (n in 0..fb[d]!!.observationSet.size - 1) {
                             sum1 += c[k][m][d][n] * dataSet[members[d]][n][i]
                             sum2 += c[k][m][d][n]
+                           // println("c[k = $k][m = $m][d = $d][n = $n] = ${c[k][m][d][n]}")
                         }
                     }
                     //println(sum1)
@@ -194,7 +202,7 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
             }
             for (m in 0..mixtures - 1) {
                 emissions[k].weights[m] /= sum1
-                //println(emissions[k].mixingCoefficients[m])
+                //println(emissions[k].weights[m])
             }
         }
 
@@ -211,10 +219,10 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                             sum1 += c[k][m][d][n] * diff * diff
                         }
                     }
-                    emissions[k].variances[m][i] = (sum1 / sum2)
-
+                    emissions[k].variances[m][i] = Math.max((sum1 / sum2),0.1)
                 }
             }
+            //emissions[k].update()
         }
     }
 

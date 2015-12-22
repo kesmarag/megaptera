@@ -12,12 +12,18 @@ class GaussianMixtureDensity(public var weights: DoubleArray,
         for (d in 0..x.size - 1) {
             val dx = x[d] - means[m][d]
             p += -0.5 * dx * dx / ( variances[m][d])
-            s *=variances[m][d]
-            //println("var[$m][$d] = ${variances[m][d]}")
+            s *= (variances[m][d])
+            if (variances[m][d].isNaN()) {
+                //println("var[$m][$d] = ${variances[m][d]}")
+            }
         }
         //s = Math.exp(s)
        // println("s = $s")
+        if (s.isNaN()) {
+            println("s = $s")
+        }
         p += -0.5 * x.size.toDouble() * Math.log(2 * Math.PI) - 0.5 * Math.log(s) + Math.log(weights[m])
+        //println(p)
         return p
     }
 
@@ -26,11 +32,16 @@ class GaussianMixtureDensity(public var weights: DoubleArray,
     }
 
     public fun logDensity(x: DoubleArray): Double {
-        var p = 0.0
-        for (m in 0..weights.size - 1) {
-            p += density(x, m)
+        val logDensityArray: DoubleArray = DoubleArray(weights.size)
+        for (m in 0..weights.size-1){
+            logDensityArray[m] = logDensity(x,m)
         }
-        return Math.log(p)
+        val maxLogDensity: Double = logDensityArray.max()?:1.0
+        var sum: Double = 0.0
+        for (m in 0..weights.size - 1) {
+            sum += Math.exp(logDensityArray[m]-maxLogDensity)
+        }
+        return maxLogDensity + Math.log(sum)
     }
 
 
@@ -55,7 +66,16 @@ class GaussianMixtureDensity(public var weights: DoubleArray,
     }
 
     public fun mixtureContribution(x: DoubleArray, m: Int): Double {
-        return density(x,m)/density(x)
+        val logDensityArray: DoubleArray = DoubleArray(weights.size)
+        for (i in 0..weights.size-1){
+            logDensityArray[i] = logDensity(x,i)
+        }
+        var sum: Double = 0.0
+        for (i in 0..weights.size-1) {
+            sum += Math.exp(logDensityArray[i] - logDensityArray[m])
+        }
+        return 1.0/sum
+        //return p
     }
 
     public fun mixtureContribution(observation: Observation, m: Int): Double {

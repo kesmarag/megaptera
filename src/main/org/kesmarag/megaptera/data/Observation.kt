@@ -19,18 +19,5 @@ class Observation : Property{
         return data[i]
     }
 
-    public fun standardise(): Unit{
-        if (length>1) {
-            var mean = data.sum() / length.toDouble()
-            var std = 0.0
-            data.forEach { std += (it-mean) / (length-1).toDouble() }
-            for (i in 0..length-1){
-                data[i] = (data[i] - mean)/std
-            }
-
-        }else{
-
-        }
-    }
 
 }

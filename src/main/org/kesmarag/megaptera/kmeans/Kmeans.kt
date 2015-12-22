@@ -14,10 +14,10 @@ class Kmeans(val dataSet: DataSet, val clusters:Int = 3, id: Int = 0): Owner(id)
             .flatMap { it.data.toList() }
     private var changes = 0
     init {
-        println("K-means clustering")
+        //println("K-means clustering")
         adapt()
         estimateVariations()
-        println("end of kmeans here...")
+        //println("end of kmeans here...")
         display()
     }
 
@@ -79,7 +79,11 @@ class Kmeans(val dataSet: DataSet, val clusters:Int = 3, id: Int = 0): Owner(id)
         }
         for (k in 0..clusters-1){
             for (n in 0..dataSet.observationLength-1) {
-                variances[k][n] = Math.max( 2.0*sum[k][n] / (L[k]).toDouble(), 0.5)
+                variances[k][n] = Math.max( sum[k][n] / (L[k]).toDouble(), 1.0 )
+                if (variances[k][n].isNaN()){
+                    println("############### NuN ################")
+                    variances[k][n] = 1.0
+                }
             }
         }
 

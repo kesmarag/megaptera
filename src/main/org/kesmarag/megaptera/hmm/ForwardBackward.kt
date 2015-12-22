@@ -51,6 +51,7 @@ class ForwardBackward(var hmm: GaussianHiddenMarkovModel,
                 }
                 delta[k] = hmm.emissions[k].density(observationSet[n]) * tmpSum
                 //println("delta = ${delta[k]}")
+                //println("delta = ${hmm.emissions[k].density(observationSet[n])}")
             }
             c[n] = delta.sum()
             for (k in 0..hmm.pi.size - 1) {
