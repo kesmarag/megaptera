@@ -49,6 +49,10 @@ class DataSet(filePattern: String = "*.csv", var candidateOwners: Int = 1) {
         members.forEach { it.redistribute(candidateOwners,0) }
     }
 
+    public fun standardize(): Unit{
+        members.forEach { it.standardize() }
+    }
+
     override fun toString(): String {
         val str = "DataSet(size=$size,observationLength=$observationLength,candidateOwners=$candidateOwners)"
         return str

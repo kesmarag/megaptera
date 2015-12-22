@@ -7,17 +7,12 @@ import org.kesmarag.megaptera.utils.Owner
 class Kmeans(val dataSet: DataSet, val clusters:Int = 3, id: Int = 0): Owner(id) {
     public var centroids: Array<DoubleArray> = Array(clusters, { DoubleArray(dataSet.observationLength) })
         private set
-    public var variances: Array<DoubleArray> = Array(clusters, { DoubleArray(dataSet.observationLength) })
-        private set
     private var observationList: List<Observation> = dataSet.members
             .filter { isOwned(it) }
             .flatMap { it.data.toList() }
     private var changes = 0
     init {
-        //println("K-means clustering")
         adapt()
-        estimateVariations()
-        //println("end of kmeans here...")
         display()
     }
 
@@ -60,32 +55,7 @@ class Kmeans(val dataSet: DataSet, val clusters:Int = 3, id: Int = 0): Owner(id)
                 }
                 L[pos]++
             }
-           // L.forEachIndexed { La,i -> println("L[$La] = $i")  }
         }while(changes > 0 && step<=100)
-
-    }
-
-    private fun estimateVariations(): Unit{
-        var sum = Array(clusters,{ DoubleArray(dataSet.observationLength)})
-        var L = IntArray(clusters)
-        for (i in 0..observationList.size-1) {
-            for (n in 0..dataSet.observationLength-1){
-                //println(observationList[i].ownerID)
-                sum[observationList[i].ownerID][n] +=
-                        (observationList[i].data[n] - centroids[observationList[i].ownerID][n])*
-                        (observationList[i].data[n] - centroids[observationList[i].ownerID][n])
-            }
-            L[observationList[i].ownerID]++
-        }
-        for (k in 0..clusters-1){
-            for (n in 0..dataSet.observationLength-1) {
-                variances[k][n] = Math.max( sum[k][n] / (L[k]).toDouble(), 1.0 )
-                if (variances[k][n].isNaN()){
-                    println("############### NuN ################")
-                    variances[k][n] = 1.0
-                }
-            }
-        }
 
     }
 
@@ -100,14 +70,6 @@ class Kmeans(val dataSet: DataSet, val clusters:Int = 3, id: Int = 0): Owner(id)
     public fun display(): Unit{
         println("==> centroids <==")
         centroids.forEach {
-            for (n in 0..dataSet.observationLength-1){
-                print(it[n])
-                print(" ")
-            }
-            println()
-        }
-        println("==> variances <==")
-        variances.forEach {
             for (n in 0..dataSet.observationLength-1){
                 print(it[n])
                 print(" ")

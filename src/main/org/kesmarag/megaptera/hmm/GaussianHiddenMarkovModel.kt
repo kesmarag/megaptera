@@ -23,10 +23,10 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
     public var emissions = emptyArray<GaussianMixtureDensity>()
 
     init {
+        dataSet.standardize()
         updateMemberList()
         paInit()
         emissionsInit()
-        //println(totalPosterior())
         if (states < 2) {
             throw IllegalArgumentException("number of states must be greater than one")
         }
@@ -46,30 +46,20 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
         for (k in 0..states - 1) {
             for (m in 0..mixtures - 1) {
                 means[k][m] = kmeans.centroids[k + states * m].clone()
-                //println(means[k][m].forEach { print("$it ") })
-                variances[k][m] = kmeans.variances[k + states * m].clone()
-                //println(variances[k][m].forEach { print("$it ") })
-
+                variances[k][m].fill(1.0)
             }
         }
-        //means.forEach { println(it.forEach { it.forEach { println(it) } }) }
-        //println(weights[0])
-        //kmeans.centroids.forEach { it.forEach { println(it) } }
         emissions = Array(states,
                 { k ->
-                    GaussianMixtureDensity(weights.clone(),means[k].clone(),variances[k].clone())
+                    GaussianMixtureDensity(weights.clone(), means[k].clone(), variances[k].clone())
 
                 })
-
-        //emissions.forEach { println("variances = ${it.variances[0][0]}") }
-        //println("end of emissionsInit here...")
     }
 
     private fun paInit(): Unit {
         val element = 1.0 / states.toDouble()
         aij.forEach { it.fill(element) }
         pi.fill(element)
-        //println("end of paInit here...")
     }
 
     private fun updateMemberList(): Unit {
@@ -92,7 +82,7 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
             var prevPost: Double = 0.0
 
             var iters: Int = 1
-            while (Math.abs((newPost - prevPost) / prevPost) > 3e-14 && iters <= 50 ) {
+            while (Math.abs((newPost - prevPost) / prevPost) > 3e-14 && iters <= 200 ) {
                 println(iters)
                 var post: Array<ForwardBackward?> = Array(members.size, { null })
                 //var post: Array<ForwardBackward?> = emptyArray()
@@ -150,7 +140,7 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                     for (n in 0..fb[d]!!.observationSet.size - 1) {
                         c[k][m][d][n] = emissions[k].mixtureContribution(fb[d]!!.observationSet[n], m) *
                                 fb[d]!!.gamma[n][k]
-                        if ( emissions[k].mixtureContribution(fb[d]!!.observationSet[n], m).isNaN()){
+                        if ( emissions[k].mixtureContribution(fb[d]!!.observationSet[n], m).isNaN()) {
                             println("[k = $k][m = $m][d = $d][n = $n] ## NaN detected ##")
                             //println(emissions[k].mixtureContribution(fb[d]!!.observationSet[n], m))
 
@@ -175,12 +165,12 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                         for (n in 0..fb[d]!!.observationSet.size - 1) {
                             sum1 += c[k][m][d][n] * dataSet[members[d]][n][i]
                             sum2 += c[k][m][d][n]
-                           // println("c[k = $k][m = $m][d = $d][n = $n] = ${c[k][m][d][n]}")
+                            // println("c[k = $k][m = $m][d = $d][n = $n] = ${c[k][m][d][n]}")
                         }
                     }
                     //println(sum1)
                     emissions[k].means[m][i] = sum1 / sum2
-                   // println(emissions[k].means[m][i])
+                    // println(emissions[k].means[m][i])
                 }
             }
         }
@@ -200,10 +190,12 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                 emissions[k].weights[m] = sum2
 
             }
+            //println("====")
             for (m in 0..mixtures - 1) {
                 emissions[k].weights[m] /= sum1
                 //println(emissions[k].weights[m])
             }
+            //println("====")
         }
 
         // covariances update
@@ -219,10 +211,10 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                             sum1 += c[k][m][d][n] * diff * diff
                         }
                     }
-                    emissions[k].variances[m][i] = Math.max((sum1 / sum2),0.1)
+                    emissions[k].variances[m][i] = Math.max((sum1 / sum2), 0.01)
+                    //println(emissions[k].variances[m][i])
                 }
             }
-            //emissions[k].update()
         }
     }
 
