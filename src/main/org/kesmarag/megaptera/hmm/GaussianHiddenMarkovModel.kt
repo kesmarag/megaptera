@@ -82,7 +82,7 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
             var prevPost: Double = 0.0
 
             var iters: Int = 1
-            while (Math.abs((newPost - prevPost) / prevPost) > 3e-14 && iters <= 200 ) {
+            while (Math.abs((newPost - prevPost) / prevPost) > 3e-14 && iters <= 100 ) {
                 println(iters)
                 var post: Array<ForwardBackward?> = Array(members.size, { null })
                 //var post: Array<ForwardBackward?> = emptyArray()

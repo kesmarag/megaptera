@@ -10,19 +10,21 @@ import org.kesmarag.megaptera.utils.ObservationSet
 fun main(args: Array<String>) {
     println(".:: megaptera v0.1 ::.")
     //val pat: String? = readLine()
-    //val dataSet = DataSet("/home/kesmarag/tmp/example2/test*",1)
-    val dataSet = DataSet("/home/kesmarag/dwp1.*",1)
+    val dataSet = DataSet("/home/kesmarag/dev/test/dataSet/*.csv",1)
+    //val dataSet = DataSet("/home/kesmarag/dwp1.*",1)
     //dataSet.members.forEach { it.standardize() }
   //  dataSet.members.forEach { println(it[0][0]) }
-   // val dataSet = DataSet(pat?:"*.csv",1)
+    //val dataSet = DataSet(pat?:"*.csv",1)
 
-    val hmm = GaussianHiddenMarkovModel(dataSet, 3, 1, 0)
+    //val hmm = GaussianHiddenMarkovModel(dataSet, 4, 8, 0)
 
-    hmm.update()
+    //hmm.update()
    // println(Math.exp(Math.log(0.0)).isNaN())
     //print(0.0/0.0)
-    // val clustering = GhmmClustering(dataSet,10,3,1)
-    //clustering.training()
+     val clustering = GhmmClustering(dataSet,2,2,1)
+     clustering.training()
+    println("### Results ###")
+    dataSet.members.forEachIndexed { i, oS -> println("${oS.ownerID}") }
     //val w = doubleArrayOf(0.1,0.9)
     //val m = arrayOf(doubleArrayOf(0.0,0.0),doubleArrayOf(0.0,0.0))
     //val s = arrayOf(doubleArrayOf(1.0,1.0),doubleArrayOf(1.0,1.0))
