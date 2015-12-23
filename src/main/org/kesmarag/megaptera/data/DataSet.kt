@@ -41,7 +41,9 @@ class DataSet(filePattern: String = "*.csv", var candidateOwners: Int = 1) {
                 }
                 observationSet+=Observation(tmpArray)
             }
+            observationSet.label = file.name
             members.add(observationSet)
+
         }
     }
 

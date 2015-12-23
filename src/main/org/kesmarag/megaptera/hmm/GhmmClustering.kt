@@ -48,6 +48,8 @@ class GhmmClustering(val dataSet: DataSet, val clusters: Int = 3, val states: In
         changes = 0
         calculateScores()
         dataSet.members.forEach {
+            //println(it.data[0].data[0])
+            //println(it.label)
             var j: Int = 0
             var max: Double = it.scores[0]
             for (k in 1..clusters - 1) {

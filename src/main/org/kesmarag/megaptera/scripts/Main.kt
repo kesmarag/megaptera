@@ -21,10 +21,22 @@ fun main(args: Array<String>) {
     //hmm.update()
    // println(Math.exp(Math.log(0.0)).isNaN())
     //print(0.0/0.0)
-     val clustering = GhmmClustering(dataSet,2,2,1)
-     clustering.training()
+    val clustering = GhmmClustering(dataSet,2,2,2)
+    clustering.training()
     println("### Results ###")
-    dataSet.members.forEachIndexed { i, oS -> println("${oS.ownerID}") }
+
+    dataSet.members.filter { it.ownerID == 0 }
+            .sortedBy { it.label }
+            .forEachIndexed { i, oS -> println("${oS.label} => ${oS.ownerID}") }
+    dataSet.members.filter { it.ownerID == 1 }
+            .sortedBy { it.label }
+            .forEachIndexed { i, oS -> println("${oS.label} => ${oS.ownerID}") }
+    //dataSet.members.filter { it.ownerID == 2 }
+    //        .sortedBy { it.label }
+    //        .forEachIndexed { i, oS -> println("${oS.label} => ${oS.ownerID}") }
+   // dataSet.members.filter { it.ownerID == 3 }
+   //         .sortedBy { it.label }
+   //         .forEachIndexed { i, oS -> println("${oS.label} => ${oS.ownerID}") }
     //val w = doubleArrayOf(0.1,0.9)
     //val m = arrayOf(doubleArrayOf(0.0,0.0),doubleArrayOf(0.0,0.0))
     //val s = arrayOf(doubleArrayOf(1.0,1.0),doubleArrayOf(1.0,1.0))

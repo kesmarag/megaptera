@@ -80,7 +80,6 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
             isUpdated = true
             var newPost: Double = 1.0
             var prevPost: Double = 0.0
-
             var iters: Int = 1
             while (Math.abs((newPost - prevPost) / prevPost) > 3e-14 && iters <= 100 ) {
                 println(iters)
@@ -123,7 +122,7 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
 
                 }
                 aij[j][k] = (sum2 / sum3)
-                // println("aij[$j][$k] = ${aij[j][k]}")
+                //println("aij[$j][$k] = ${aij[j][k]}")
             }
             pi[j] = sum / members.size.toDouble()
             // println(pi[j])
