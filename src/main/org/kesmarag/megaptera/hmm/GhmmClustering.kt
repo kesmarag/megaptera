@@ -19,7 +19,7 @@ class GhmmClustering(val dataSet: DataSet, val clusters: Int = 3, val states: In
         }
         for (k in 0..clusters - 1) {
             var i = rand.nextInt(dataSet.size)
-            println("i = $i")
+           // println("i = $i")
             while (!dataSet[i].isFree()) {
                 i = rand.nextInt(dataSet.size)
                 println("i = $i")

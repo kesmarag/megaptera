@@ -1,58 +1,61 @@
 package org.kesmarag.megaptera.utils
 
-import java.util.Random
+import java.util.*
 
-open class Property{
+open class Property {
     private var freedom: Boolean = true
     public var ownerID: Int = -1
         private set
-    public fun set(owner: Int){
+
+    public fun set(owner: Int) {
         if (freedom) {
-            this.ownerID = owner
+            ownerID = owner
             freedom = false
-        }else{
-            println("This class has already had owner, nothing to do")
+        } else {
+            println("This class has already got an owner, nothing to do")
         }
     }
-    constructor(){
+
+    constructor() {
         ownerID = -1
         freedom = true
     }
-    constructor(owner: Int){
+
+    constructor(owner: Int) {
         ownerID = owner
         freedom = false
     }
+
     constructor(candidateOwners: Int, startID: Int) {
         if (candidateOwners > 1) {
             val rand: Random = Random()
             ownerID = rand.nextInt(candidateOwners) + startID
-        } else{
+        } else {
             ownerID = startID
         }
         freedom = false
     }
 
-    public fun redistribute(candidateOwners: Int, startID: Int){
+    public fun redistribute(candidateOwners: Int, startID: Int) {
         val rand: Random = Random()
         ownerID = rand.nextInt(candidateOwners) + startID
         freedom = false
     }
 
-    public fun free(){
+    public fun free() {
         ownerID = -1
         freedom = true
     }
 
-    public fun freeToChange(){
+    public fun freeToChange() {
         freedom = true
     }
 
-    public fun forceSetOwner(owner: Int){
+
+    public fun forceSetOwner(owner: Int) {
         ownerID = owner
         freedom = false
     }
 
-    public fun isFree(): Boolean{
-        return freedom
-    }
+    public fun isFree() = freedom
 }
