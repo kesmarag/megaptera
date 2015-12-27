@@ -21,16 +21,18 @@ fun main(args: Array<String>) {
     //hmm.update()
    // println(Math.exp(Math.log(0.0)).isNaN())
     //print(0.0/0.0)
-    val clustering = GhmmClustering(dataSet,2,2,2)
+    val clustering = GhmmClustering(dataSet,10,2,2)
     clustering.training()
     println("### Results ###")
 
-    dataSet.members.filter { it.ownerID == 0 }
+    dataSet.members
+            //.filter { it.ownerID == 0 }
             .sortedBy { it.label }
             .forEachIndexed { i, oS -> println("${oS.label} => ${oS.ownerID}") }
-    dataSet.members.filter { it.ownerID == 1 }
-            .sortedBy { it.label }
-            .forEachIndexed { i, oS -> println("${oS.label} => ${oS.ownerID}") }
+    //dataSet.members
+            //.filter { it.ownerID == 1 }
+    //        .sortedBy { it.label }
+    //        .forEachIndexed { i, oS -> println("${oS.label} => ${oS.ownerID}") }
     //dataSet.members.filter { it.ownerID == 2 }
     //        .sortedBy { it.label }
     //        .forEachIndexed { i, oS -> println("${oS.label} => ${oS.ownerID}") }

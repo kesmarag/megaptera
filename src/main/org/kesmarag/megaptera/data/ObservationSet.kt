@@ -7,9 +7,7 @@ class ObservationSet(owner: Int = 0) : Property(owner) {
         private set
     public var scores: DoubleArray = DoubleArray(0)
     public var label: String = "none"
-    public operator fun get(i: Int): Observation {
-        return data[i]
-    }
+    public operator fun get(i: Int): Observation = data[i]
 
     public operator fun plusAssign(observation: Observation): Unit {
         data.add(observation)

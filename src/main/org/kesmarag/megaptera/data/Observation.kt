@@ -11,13 +11,8 @@ class Observation : Property{
         data = l.toDoubleArray()
         length = data.size
     }
-    public fun data(): DoubleArray{
-        return data
-    }
 
-    public operator fun get(i: Int): Double{
-        return data[i]
-    }
+    public operator fun get(i: Int): Double = data[i]
 
 
 }
