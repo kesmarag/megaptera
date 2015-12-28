@@ -1,6 +1,8 @@
 package org.kesmarag.megaptera.utils
 
-class ObservationSet(owner: Int = 0) : Property(owner) {
+import java.io.Serializable
+
+class ObservationSet(owner: Int = 0) : Property(owner), Serializable {
     public var data: MutableList<Observation> = arrayListOf()
         private set
     public var size: Int = 0

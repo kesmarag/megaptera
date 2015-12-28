@@ -1,9 +1,11 @@
 package org.kesmarag.megaptera.hmm
 
 import org.kesmarag.megaptera.utils.DataSet
+import java.io.Serializable
 import java.util.*
 
-class GhmmClustering(val dataSet: DataSet, val clusters: Int = 3, val states: Int = 3, val mixtures: Int = 2) {
+class GhmmClustering(val dataSet: DataSet, val clusters: Int = 3, val states: Int = 3, val mixtures: Int = 2)
+: Serializable{
     private var changes: Int = dataSet.size
     private var minChanges: Int = dataSet.size
     private var minChangesRepetions: Int = 0

@@ -1,9 +1,10 @@
 package org.kesmarag.megaptera.hmm
 
 import org.kesmarag.megaptera.utils.ObservationSet
+import java.io.Serializable
 
 class ForwardBackward(var hmm: GaussianHiddenMarkovModel,
-                      var observationSet: ObservationSet) {
+                      var observationSet: ObservationSet): Serializable {
     public var gamma: Array<DoubleArray> = Array(observationSet.size, { DoubleArray(hmm.pi.size) })
         private set
     public var xi: Array<Array<DoubleArray>> =

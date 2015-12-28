@@ -6,6 +6,8 @@ import org.kesmarag.megaptera.hmm.GhmmClustering
 import org.kesmarag.megaptera.utils.DataSet
 import org.kesmarag.megaptera.utils.Observation
 import org.kesmarag.megaptera.utils.ObservationSet
+import java.io.FileOutputStream
+import java.io.ObjectOutputStream
 
 fun main(args: Array<String>) {
     println(".:: megaptera v0.1 ::.")
@@ -21,10 +23,14 @@ fun main(args: Array<String>) {
     //hmm.update()
    // println(Math.exp(Math.log(0.0)).isNaN())
     //print(0.0/0.0)
-    val clustering = GhmmClustering(dataSet,10,2,2)
+    val clustering = GhmmClustering(dataSet,2,2,1)
     clustering.training()
     println("### Results ###")
-
+    val fileOut = FileOutputStream("/home/kesmarag/clusters.ser")
+    val out = ObjectOutputStream(fileOut)
+    out.writeObject(clustering)
+    out.close()
+    fileOut.close()
     dataSet.members
             //.filter { it.ownerID == 0 }
             .sortedBy { it.label }

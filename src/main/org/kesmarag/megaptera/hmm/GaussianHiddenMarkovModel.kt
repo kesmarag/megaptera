@@ -5,6 +5,7 @@ import org.kesmarag.megaptera.kmeans.Kmeans
 import org.kesmarag.megaptera.utils.DataSet
 import org.kesmarag.megaptera.utils.ObservationSet
 import org.kesmarag.megaptera.utils.Owner
+import java.io.Serializable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeUnit
 class GaussianHiddenMarkovModel(var dataSet: DataSet,
                                 val states: Int = 3,
                                 val mixtures: Int = 1,
-                                id: Int = 0) : Owner(id) {
+                                id: Int = 0) : Owner(id), Serializable {
     public val cores = Math.min(Runtime.getRuntime().availableProcessors(), 8)
     public var isUpdated: Boolean = false
         private set

@@ -1,10 +1,11 @@
 package org.kesmarag.megaptera.distributions
 
 import org.kesmarag.megaptera.utils.Observation
+import java.io.Serializable
 
 class GaussianMixtureDensity(public var weights: DoubleArray,
                              public var means: Array<DoubleArray>,
-                             public var variances: Array<DoubleArray>) {
+                             public var variances: Array<DoubleArray>): Serializable {
 
     public fun logDensity(x: DoubleArray, m: Int): Double {
         var p = 0.0

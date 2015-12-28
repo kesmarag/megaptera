@@ -3,8 +3,9 @@ package org.kesmarag.megaptera.kmeans
 import org.kesmarag.megaptera.utils.DataSet
 import org.kesmarag.megaptera.utils.Observation
 import org.kesmarag.megaptera.utils.Owner
+import java.io.Serializable
 
-class Kmeans(val dataSet: DataSet, val clusters:Int = 3, id: Int = 0): Owner(id) {
+class Kmeans(val dataSet: DataSet, val clusters:Int = 3, id: Int = 0): Owner(id), Serializable {
     public var centroids: Array<DoubleArray> = Array(clusters, { DoubleArray(dataSet.observationLength) })
         private set
     private var observationList: List<Observation> = dataSet.members

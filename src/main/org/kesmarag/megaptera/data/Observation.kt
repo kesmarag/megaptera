@@ -1,6 +1,8 @@
 package org.kesmarag.megaptera.utils
 
-class Observation : Property{
+import java.io.Serializable
+
+class Observation : Property, Serializable{
     public var data: DoubleArray
     public val length: Int
     constructor(d: DoubleArray, owner:Int = 0) : super(owner){

@@ -4,8 +4,9 @@ import org.apache.commons.csv.CSVFormat
 import java.io.File
 import java.io.FileReader
 import java.io.Reader
+import java.io.Serializable
 
-class DataSet(filePattern: String = "*.csv", var candidateOwners: Int = 1) {
+class DataSet(filePattern: String = "*.csv", var candidateOwners: Int = 1): Serializable {
     public var members: MutableList<ObservationSet> = arrayListOf()
         private set
     public var size: Int = 0
