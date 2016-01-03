@@ -18,18 +18,19 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
     public var isUpdated: Boolean = false
         private set
     private var D: Int = dataSet.observationLength
-    private var members: MutableList<Int> = arrayListOf()
+    public var members: MutableList<Int> = arrayListOf()
+        private set
     public var pi: DoubleArray = DoubleArray(states)
     public var aij: Array<DoubleArray> = Array(states, { DoubleArray(states) })
     public var emissions = emptyArray<GaussianMixtureDensity>()
 
     init {
-        dataSet.standardize()
+        //dataSet.standardize()
         updateMemberList()
         paInit()
         emissionsInit()
         if (states < 2) {
-            throw IllegalArgumentException("number of states must be greater than one")
+            throw IllegalArgumentException("number of states must be greater than one.")
         }
 
     }
@@ -71,7 +72,7 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                 .filter { isOwned(it.second) }
                 .map { it -> it.first }
                 .toArrayList()
-        //println("end of updateMemberList here...")
+                isUpdated = false
     }
 
     public fun update(): Unit {
@@ -82,10 +83,9 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
             var newPost: Double = 1.0
             var prevPost: Double = 0.0
             var iters: Int = 1
-            while (Math.abs((newPost - prevPost) / prevPost) > 3e-14 && iters <= 100 ) {
-                println(iters)
+            while (Math.abs((newPost - prevPost) / prevPost) > 3e-12 && iters <= 100 ) {
+                //println(iters)
                 var post: Array<ForwardBackward?> = Array(members.size, { null })
-                //var post: Array<ForwardBackward?> = emptyArray()
                 var threadPool: ExecutorService = Executors.newFixedThreadPool(cores)
                 for (q in 0..members.size - 1) {
                     threadPool.execute(Runnable { post[q] = ForwardBackward(this, dataSet[members[q]]) })
@@ -95,10 +95,9 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                 baum_welch(post)
                 prevPost = newPost
                 newPost = totalPosterior(post)
-                println("posterior = $newPost")
+                //println("posterior = $newPost")
                 iters++
             }
-            //println("posterior after = $newPost")
             isUpdated = false
         } else {
             println("Nothing to do...")
@@ -142,12 +141,8 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                                 fb[d]!!.gamma[n][k]
                         if ( emissions[k].mixtureContribution(fb[d]!!.observationSet[n], m).isNaN()) {
                             println("[k = $k][m = $m][d = $d][n = $n] ## NaN detected ##")
-                            //println(emissions[k].mixtureContribution(fb[d]!!.observationSet[n], m))
-
-                            //c[k][m][d][n] = fb[d]!!.gamma[n][k]
 
                         }
-                        //println(emissions[k].mixtureContribution(fb[d]!!.observationSet[n], m))
                     }
                 }
             }
@@ -165,10 +160,8 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                         for (n in 0..fb[d]!!.observationSet.size - 1) {
                             sum1 += c[k][m][d][n] * dataSet[members[d]][n][i]
                             sum2 += c[k][m][d][n]
-                            // println("c[k = $k][m = $m][d = $d][n = $n] = ${c[k][m][d][n]}")
                         }
                     }
-                    //println(sum1)
                     emissions[k].means[m][i] = sum1 / sum2
                     // println(emissions[k].means[m][i])
                 }
@@ -190,12 +183,10 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                 emissions[k].weights[m] = sum2
 
             }
-            //println("====")
             for (m in 0..mixtures - 1) {
                 emissions[k].weights[m] /= sum1
                 //println(emissions[k].weights[m])
             }
-            //println("====")
         }
 
         // covariances update

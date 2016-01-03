@@ -5,7 +5,7 @@ import java.io.Serializable
 
 class GaussianMixtureDensity(public var weights: DoubleArray,
                              public var means: Array<DoubleArray>,
-                             public var variances: Array<DoubleArray>): Serializable {
+                             public var variances: Array<DoubleArray>) : Serializable {
 
     public fun logDensity(x: DoubleArray, m: Int): Double {
         var p = 0.0
@@ -14,9 +14,6 @@ class GaussianMixtureDensity(public var weights: DoubleArray,
             val dx = x[d] - means[m][d]
             p += -0.5 * dx * dx / ( variances[m][d])
             s *= (variances[m][d])
-        }
-        if (s.isNaN()) {
-            println("s = $s")
         }
         p += -0.5 * x.size.toDouble() * Math.log(2 * Math.PI) - 0.5 * Math.log(s) + Math.log(weights[m])
         return p

@@ -4,7 +4,7 @@ import org.kesmarag.megaptera.utils.ObservationSet
 import java.io.Serializable
 
 class ForwardBackward(var hmm: GaussianHiddenMarkovModel,
-                      var observationSet: ObservationSet): Serializable {
+                      var observationSet: ObservationSet) : Serializable {
     public var gamma: Array<DoubleArray> = Array(observationSet.size, { DoubleArray(hmm.pi.size) })
         private set
     public var xi: Array<Array<DoubleArray>> =
@@ -51,8 +51,6 @@ class ForwardBackward(var hmm: GaussianHiddenMarkovModel,
                     tmpSum += alpha[n - 1][j] * hmm.aij[j][k]
                 }
                 delta[k] = hmm.emissions[k].density(observationSet[n]) * tmpSum
-                //println("delta = ${delta[k]}")
-                //println("delta = ${hmm.emissions[k].density(observationSet[n])}")
             }
             c[n] = delta.sum()
             for (k in 0..hmm.pi.size - 1) {
