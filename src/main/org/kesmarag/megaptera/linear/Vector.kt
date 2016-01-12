@@ -8,6 +8,7 @@ abstract class Vector : Serializable, Cloneable {
     public val dimension: Int
     private var elements: DoubleArray
     abstract public val type: VectorType
+
     constructor(_dimension: Int) {
         dimension = _dimension
         elements = DoubleArray(_dimension)
@@ -35,7 +36,7 @@ abstract class Vector : Serializable, Cloneable {
         if (this.dimension != other.dimension) {
             throw IllegalArgumentException("vectors with different dimensions")
         }
-        return this + other*(-1.0)
+        return this + other * (-1.0)
     }
 
     operator fun times(num: Double): Vector {
@@ -56,9 +57,9 @@ abstract class Vector : Serializable, Cloneable {
 
     override fun clone(): Vector {
         val cloned: Vector
-        if (this.type == VectorType.COLUMN_VECTOR){
+        if (this.type == VectorType.COLUMN_VECTOR) {
             cloned = this.elements.toColumnVector()
-        } else{
+        } else {
             cloned = this.elements.toRowVector()
         }
         return cloned
@@ -66,6 +67,22 @@ abstract class Vector : Serializable, Cloneable {
 
     public fun randomize(a: Double, b: Double) {
 
+    }
+
+    abstract public fun t(): Vector
+
+    public fun norm0(): Double = elements.map { Math.abs(it) }.max()!!
+
+    public fun norm1(): Double {
+        var result = 0.0
+        elements.forEach { result += Math.abs(it) }
+        return result
+    }
+
+    public fun norm2(): Double {
+        var result = 0.0
+        elements.forEach { result += it*it }
+        return Math.sqrt(result)
     }
 
 }

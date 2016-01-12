@@ -21,5 +21,7 @@ fun DoubleArray.toRowVector(): Vector{
     return tmpVector
 }
 
+fun distance(vector1: Vector, vector2: Vector): Double = (vector1-vector2).norm2()
+
 infix operator fun Double.times(vector: Vector): Vector = vector.times(this)
 infix operator fun Int.times(vector: Vector): Vector = vector.times(this.toDouble())
