@@ -40,6 +40,7 @@ class GhmmClustering(val dataSet: DataSet, val clusters: Int = 3, val states: In
         for (k in 0..clusters - 1) {
             println("##### k = $k #####")
             ghmm[k].update()
+            println("##################")
         }
     }
 

@@ -14,7 +14,7 @@ class Kmeans(val dataSet: DataSet, val clusters:Int = 3, id: Int = 0): Owner(id)
     private var changes = 0
     init {
         adapt()
-        display()
+        //display()
     }
 
     public fun adapt(){

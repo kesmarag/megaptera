@@ -10,32 +10,22 @@ import java.io.FileWriter
 import java.io.ObjectOutputStream
 
 fun main(args: Array<String>) {
-    println(".:: megaptera v0.1a ::.")
-    //val pat: String? = readLine()
-    val dataSet = DataSet("/home/kesmarag/dev/test/dataSet3/*.csv", 1)
-    //val hmm = GaussianHiddenMarkovModel(dataSet, 4, 8, 0)
-    //hmm.update()
-    val clustering = GhmmClustering(dataSet, 6, 2, 1)
+    println(".:: megaptera v0.1c ::.")
+    //println(args[0])
+    //val dataSet = DataSet("/home/kesmarag/dev/test/dataSet3/*.csv", 1)
+    val dataSet = DataSet(args[0] + "/*.csv", 1)
+    val clustering = GhmmClustering(dataSet, args[1].toInt(), args[2].toInt(), args[3].toInt())
     clustering.training()
     println("### Results ###")
-    val fileOut = FileOutputStream("/home/kesmarag/clusters.ser")
+    val fileOut = FileOutputStream(args[4] +"/clusters.ser")
     val out = ObjectOutputStream(fileOut)
     out.writeObject(clustering)
     out.close()
     fileOut.close()
+    //var i_noisy: Int = 1682
+    //dataSet.members.forEachIndexed { i, oSet -> if (oSet.label == "data_01682.csv") i_noisy = i }
+    //println("i_noisy = ${i_noisy}")
     /*
-    dataSet.members
-            .filter { it.label == "data_841.csv" || it.label == "data_1682.csv" }
-            .sortedBy { it.label }
-            .forEachIndexed { i, oS ->
-                println("${oS.label} => ${oS.ownerID} => ${oS.scores[0]} |" +
-                        " ${oS.scores[1]} | ${oS.scores[2]}")
-            }
-    */
-
-    var i_noisy: Int = 1682
-    dataSet.members.forEachIndexed { i, oSet -> if (oSet.label == "data_01682.csv") i_noisy = i }
-    println("i_noisy = ${i_noisy}")
     var min = 1000.0
     var argName: String = "none"
     for (i in 0..dataSet.size-2){
@@ -52,7 +42,8 @@ fun main(args: Array<String>) {
                 println("${oS.label} => ${oS.ownerID} => ${oS.scores[0]} |" +
                         " ${oS.scores[1]} | ${oS.scores[2]}")
             }
-    println("argmin = $argName")
+    */
+    //println("argmin = $argName")
     //dataSet.members
     //.filter { it.ownerID == 1 }
     //        .sortedBy { it.label }
@@ -68,17 +59,15 @@ fun main(args: Array<String>) {
     // dataSet[0].scores.forEach { println(it) }
     // println("=== 1 ===")
     // dataSet[1].scores.forEach { println(it) }
-    val file = File("/home/kesmarag/results.csv")
+    val file = File(args[4] + "/results.csv")
     val writer = FileWriter(file)
     var records = CSVFormat.EXCEL
     val csvFilePrinter = CSVPrinter(writer,records)
-    //csvFilePrinter.printRecord(listOf(1,2,5))
-    //csvFilePrinter.printRecord(listOf(10,21,52))
     dataSet.members
             //.filter { it.label == "data_841.csv" || it.label == "data_1682.csv" || it.label == argName }
             .sortedBy { it.label }
             .forEachIndexed { i, oS ->
-                println(oS.label)
+                //println(oS.label)
                 csvFilePrinter.printRecord(oS.scores.toArrayList())
             }
 
