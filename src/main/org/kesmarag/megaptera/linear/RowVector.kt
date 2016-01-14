@@ -21,5 +21,14 @@ class RowVector(_dimension: Int) : Vector(_dimension) {
         }
         return innerProduct
     }
+
+    override fun toString(): String {
+        var str: String = "["
+        for (i in 0..this.dimension-2){
+            str = str + this[i].toString() + ", "
+        }
+        str+= "${this[this.dimension-1]}]\n"
+        return str
+    }
 }
 

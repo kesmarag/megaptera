@@ -19,8 +19,20 @@ fun sigmoid(vector: Vector): Vector {
     }
     return sigmoidVector
 }
+/*
+fun softmax(vector: ColumnVector): ColumnVector {
+    var softmaxVector = ColumnVector(vector.dimension)
+    var sumOfExp = 0.0
+    for (i in 0..vector.dimension-1){
+        val exp = Math.exp(vector[i])
+        sumOfExp+= exp
+        softmaxVector[i] = exp
+    }
+    softmaxVector = softmaxVector*(1.0/sumOfExp)
+    return softmaxVector
+}
 
-fun softmax(vector: Vector): Vector {
+fun softmax(vector: RowVector): Vector {
     var softmaxVector: Vector
     if (vector.type == VectorType.COLUMN_VECTOR) {
         softmaxVector = ColumnVector(vector.dimension)
@@ -33,6 +45,7 @@ fun softmax(vector: Vector): Vector {
         sumOfExp+= exp
         softmaxVector[i] = exp
     }
-    softmaxVector = softmaxVector*(1/sumOfExp)
+    softmaxVector = softmaxVector*(1.0/sumOfExp)
     return softmaxVector
 }
+*/

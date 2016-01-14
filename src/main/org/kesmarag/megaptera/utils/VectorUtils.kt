@@ -6,7 +6,7 @@ import org.kesmarag.megaptera.linear.Vector
 import org.kesmarag.megaptera.linear.VectorType
 
 
-fun DoubleArray.toColumnVector(): Vector {
+fun DoubleArray.toColumnVector(): ColumnVector {
     val tmpVector = ColumnVector(this.size)
     for (i in 0..this.size - 1) {
         tmpVector[i] = this[i]
@@ -14,7 +14,7 @@ fun DoubleArray.toColumnVector(): Vector {
     return tmpVector
 }
 
-fun DoubleArray.toRowVector(): Vector {
+fun DoubleArray.toRowVector(): RowVector {
     val tmpVector = RowVector(this.size)
     for (i in 0..this.size - 1) {
         tmpVector[i] = this[i]
@@ -22,10 +22,10 @@ fun DoubleArray.toRowVector(): Vector {
     return tmpVector
 }
 
-fun distance(vector1: Vector, vector2: Vector): Double = (vector1 - vector2).norm2()
+//fun distance(vector1: Vector, vector2: Vector): Double = (vector1 - vector2).norm2()
 
-infix operator fun Double.times(vector: Vector): Vector = vector.times(this)
-infix operator fun Int.times(vector: Vector): Vector = vector.times(this.toDouble())
+infix operator fun Double.times(vector: ColumnVector): ColumnVector = vector.times(this)
+infix operator fun Int.times(vector: ColumnVector): ColumnVector = vector.times(this.toDouble())
 
 fun Math.exp(a: Double,vector: Vector): Vector{
     val expaVector: Vector

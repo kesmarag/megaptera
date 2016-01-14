@@ -46,4 +46,14 @@ class DenseMatrix(_rows: Int, _columns: Int) : Matrix(_rows, _columns) {
         }
         return newDense
     }
+
+    override fun toString(): String {
+        var str = ""
+        for (i in 0..rows-1){
+            str += this[i].toString()
+        }
+        str+="\n"
+        return str
+    }
+
 }
