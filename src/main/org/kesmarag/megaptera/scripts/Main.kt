@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
     val clustering = GhmmClustering(dataSet, args[1].toInt(), args[2].toInt(), args[3].toInt())
     clustering.training()
     println("### Results ###")
-    val fileOut = FileOutputStream(args[4] +"/clusters.ser")
+    val fileOut = FileOutputStream(args[4] + "/clusters.ser")
     val out = ObjectOutputStream(fileOut)
     out.writeObject(clustering)
     out.close()
@@ -62,7 +62,7 @@ fun main(args: Array<String>) {
     val file = File(args[4] + "/results.csv")
     val writer = FileWriter(file)
     var records = CSVFormat.EXCEL
-    val csvFilePrinter = CSVPrinter(writer,records)
+    val csvFilePrinter = CSVPrinter(writer, records)
     dataSet.members
             //.filter { it.label == "data_841.csv" || it.label == "data_1682.csv" || it.label == argName }
             .sortedBy { it.label }
@@ -76,14 +76,12 @@ fun main(args: Array<String>) {
     csvFilePrinter.close();
 
 
-
-
 }
 
-fun dist(a1: DoubleArray,a2: DoubleArray): Double{
+fun dist(a1: DoubleArray, a2: DoubleArray): Double {
     var s: Double = 0.0
-    for (n in 0..a1.size-1){
-        s += (a1[n]-a2[n])*(a1[n]-a2[n])
+    for (n in 0..a1.size - 1) {
+        s += (a1[n] - a2[n]) * (a1[n] - a2[n])
     }
     return s
 }
