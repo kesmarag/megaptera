@@ -7,19 +7,14 @@ import org.kesmarag.megaptera.linear.VectorType
 
 fun sigmoid(a: Double): Double = 1.0 / (1.0 + Math.exp(-a))
 
-fun sigmoid(vector: Vector): Vector {
-    val sigmoidVector: Vector
-    if (vector.type == VectorType.COLUMN_VECTOR) {
-        sigmoidVector = ColumnVector(vector.dimension)
-    } else {
-        sigmoidVector = RowVector(vector.dimension)
-    }
+fun sigmoid(vector: ColumnVector): ColumnVector {
+    val sigmoidVector = ColumnVector(vector.dimension)
     for (i in 0..vector.dimension - 1) {
         sigmoidVector[i] = sigmoid(vector[i])
     }
     return sigmoidVector
 }
-/*
+
 fun softmax(vector: ColumnVector): ColumnVector {
     var softmaxVector = ColumnVector(vector.dimension)
     var sumOfExp = 0.0
@@ -31,21 +26,3 @@ fun softmax(vector: ColumnVector): ColumnVector {
     softmaxVector = softmaxVector*(1.0/sumOfExp)
     return softmaxVector
 }
-
-fun softmax(vector: RowVector): Vector {
-    var softmaxVector: Vector
-    if (vector.type == VectorType.COLUMN_VECTOR) {
-        softmaxVector = ColumnVector(vector.dimension)
-    } else {
-        softmaxVector = RowVector(vector.dimension)
-    }
-    var sumOfExp = 0.0
-    for (i in 0..vector.dimension-1){
-        val exp = Math.exp(vector[i])
-        sumOfExp+= exp
-        softmaxVector[i] = exp
-    }
-    softmaxVector = softmaxVector*(1.0/sumOfExp)
-    return softmaxVector
-}
-*/

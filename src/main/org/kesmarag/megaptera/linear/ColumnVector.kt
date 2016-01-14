@@ -29,9 +29,18 @@ class ColumnVector(_dimension: Int) : Vector(_dimension) {
         return cloned
     }
 
-
-
     operator fun plus(other: ColumnVector): ColumnVector {
+        if (this.dimension != other.dimension) {
+            throw IllegalArgumentException("vectors with different dimensions")
+        }
+        val tmpVector = this.clone()
+        for (i in 0..this.dimension - 1) {
+            tmpVector[i] += other[i]
+        }
+        return tmpVector
+    }
+
+    operator fun plus(other: RowVector): ColumnVector {
         if (this.dimension != other.dimension) {
             throw IllegalArgumentException("vectors with different dimensions")
         }
@@ -46,7 +55,7 @@ class ColumnVector(_dimension: Int) : Vector(_dimension) {
         if (this.dimension != other.dimension) {
             throw IllegalArgumentException("vectors with different dimensions")
         }
-        return this + other// * (-1.0)
+        return this + other * (-1.0)
     }
 
     operator fun times(num: Double): ColumnVector {

@@ -22,18 +22,17 @@ fun DoubleArray.toRowVector(): RowVector {
     return tmpVector
 }
 
-//fun distance(vector1: Vector, vector2: Vector): Double = (vector1 - vector2).norm2()
+fun distance(vector1: ColumnVector, vector2: ColumnVector): Double = (vector1 - vector2).norm2()
+fun distance(vector1: RowVector, vector2: RowVector): Double = (vector1 - vector2).norm2()
 
 infix operator fun Double.times(vector: ColumnVector): ColumnVector = vector.times(this)
 infix operator fun Int.times(vector: ColumnVector): ColumnVector = vector.times(this.toDouble())
+infix operator fun Double.times(vector: RowVector): RowVector = vector.times(this)
+infix operator fun Int.times(vector: RowVector): RowVector = vector.times(this.toDouble())
 
-fun Math.exp(a: Double,vector: Vector): Vector{
-    val expaVector: Vector
-    if (vector.type == VectorType.COLUMN_VECTOR){
-        expaVector = ColumnVector(vector.dimension)
-    }else{
-        expaVector = RowVector(vector.dimension)
-    }
+
+fun Math.exp(a: Double,vector: ColumnVector): ColumnVector{
+    val expaVector: ColumnVector = ColumnVector(vector.dimension)
     for (i in 0..vector.dimension-1){
         expaVector[i] = Math.exp(a*vector[i])
     }

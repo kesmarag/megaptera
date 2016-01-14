@@ -1,5 +1,7 @@
 package org.kesmarag.megaptera.linear
 
+import org.kesmarag.megaptera.utils.toRowVector
+
 class RowVector(_dimension: Int) : Vector(_dimension) {
     override fun t(): ColumnVector {
         val tmpVector = ColumnVector(dimension)
@@ -29,6 +31,56 @@ class RowVector(_dimension: Int) : Vector(_dimension) {
         }
         str+= "${this[this.dimension-1]}]\n"
         return str
+    }
+
+    override fun clone(): RowVector {
+        val cloned = this.elements.toRowVector()
+        return cloned
+    }
+
+    operator fun plus(other: ColumnVector): RowVector {
+        if (this.dimension != other.dimension) {
+            throw IllegalArgumentException("vectors with different dimensions")
+        }
+        val tmpVector = this.clone()
+        for (i in 0..this.dimension - 1) {
+            tmpVector[i] += other[i]
+        }
+        return tmpVector
+    }
+
+    operator fun plus(other: RowVector): RowVector {
+        if (this.dimension != other.dimension) {
+            throw IllegalArgumentException("vectors with different dimensions")
+        }
+        val tmpVector = this.clone()
+        for (i in 0..this.dimension - 1) {
+            tmpVector[i] += other[i]
+        }
+        return tmpVector
+    }
+
+    operator fun minus(other: RowVector): RowVector {
+        if (this.dimension != other.dimension) {
+            throw IllegalArgumentException("vectors with different dimensions")
+        }
+        return this + other * (-1.0)
+    }
+
+    operator fun times(num: Double): RowVector {
+        val tmpVector = this.clone()
+        for (i in 0..this.dimension - 1) {
+            tmpVector[i] *= num
+        }
+        return tmpVector
+    }
+
+    operator fun times(num: Int): RowVector {
+        val tmpVector = this.clone()
+        for (i in 0..this.dimension - 1) {
+            tmpVector[i] *= num.toDouble()
+        }
+        return tmpVector
     }
 }
 
