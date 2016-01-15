@@ -42,6 +42,24 @@ class UpperTriangularMatrix(_dimension: Int) : Matrix(_dimension, _dimension) {
         return newDense
     }
 
+    public fun inv(): UpperTriangularMatrix{
+        val upper = UpperTriangularMatrix(rows)
+
+        return upper
+    }
+
+    public fun solve(b: ColumnVector): ColumnVector{
+        val x = ColumnVector(rows)
+        for (i in rows-1 downTo 0){
+            x[i] = b[i]
+            for (j in i+1..rows-1){
+                x[i] = x[i] - this[i,j]*x[j]
+            }
+            x[i] = x[i]/this[i,i]
+        }
+        return x
+    }
+
     override fun toString(): String {
         var str = ""
         for (i in 0..rows-1){

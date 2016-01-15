@@ -25,13 +25,27 @@ class DenseMatrix(_rows: Int, _columns: Int) : Matrix(_rows, _columns) {
         }
         return newVector
     }
-
+    /*
     operator fun times(other: DenseMatrix): DenseMatrix {
         val newDense = DenseMatrix(rows, other.columns)
         for (j in 0..other.columns - 1) {
             val column = getColumn(j)
             for (i in 0..rows - 1) {
                 newDense[i][j] = this[i] * column
+            }
+        }
+        return newDense
+    }
+*/
+    operator fun times(other: DenseMatrix): DenseMatrix {
+        val newDense = DenseMatrix(rows, other.columns)
+        for (i in 0..rows-1){
+            for (j in 0..other.columns-1){
+                var sum = 0.0
+                for (k in 0..columns-1){
+                    sum += this[i,k]*other[k,j]
+                }
+                newDense[i,j] = sum
             }
         }
         return newDense
