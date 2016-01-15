@@ -1,16 +1,13 @@
-import org.kesmarag.megaptera.linear.ColumnVector
-import org.kesmarag.megaptera.linear.DenseMatrix
-import org.kesmarag.megaptera.linear.columnVectorOf
+import org.kesmarag.megaptera.linear.*
 import org.kesmarag.megaptera.utils.*
 
 fun main(args: Array<String>) {
-    val dense = DenseMatrix(5,5)
-    dense[0,0] = 20.0
-    dense[1,2] = 30.0
-    dense[2,1] = -80.0
-    val p = dense*dense*dense*dense*dense
-    val vector = columnVectorOf(4.0,4.2,2.9,3.0,1.0)
-    val sig: ColumnVector = softmax(vector)
-    val vec = dense*sig
-    println(vec)
+    val U = UpperTriangularMatrix(10)
+    U[0,0] = 10.0 ; U[0,1] = -1.0 ; U[1,1] = -2.0
+    println(U)
+    val L = LowerTriangularMatrix(10)
+    L[0,0] = 1.0 ; L[1,0] = -1.0 ; L[1,1] = 2.0
+    println(U.t())
+    val UU = U*U.t()
+    println(UU)
 }
