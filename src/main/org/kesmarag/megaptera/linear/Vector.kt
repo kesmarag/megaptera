@@ -3,10 +3,11 @@ package org.kesmarag.megaptera.linear
 import org.kesmarag.megaptera.utils.toColumnVector
 import org.kesmarag.megaptera.utils.toRowVector
 import java.io.Serializable
+import java.util.*
 
 abstract class Vector : Serializable, Cloneable {
     public val dimension: Int
-    public  var elements: DoubleArray
+    public var elements: DoubleArray
         private set
     abstract public val type: VectorType
 
@@ -23,7 +24,9 @@ abstract class Vector : Serializable, Cloneable {
 
 
     public fun randomize(a: Double, b: Double) {
-
+        for (i in 0..dimension-1) {
+            this[i] = Random().nextDouble()*(b-a)+a
+        }
     }
 
     abstract public fun t(): Vector

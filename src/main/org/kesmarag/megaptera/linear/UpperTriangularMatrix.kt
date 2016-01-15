@@ -42,10 +42,19 @@ class UpperTriangularMatrix(_dimension: Int) : Matrix(_dimension, _dimension) {
         return newDense
     }
 
-    public fun inv(): UpperTriangularMatrix{
-        val upper = UpperTriangularMatrix(rows)
-
-        return upper
+    public fun inv(): DenseMatrix{
+        val im1 = DenseMatrix(rows,rows)
+        var vec = ColumnVector(rows)
+        var x = ColumnVector(rows)
+        for (i in 0..rows-1){
+            vec[i] = 1.0
+            x = this.solve(vec)
+            for (j in 0..rows-1){
+                im1[j,i] = x[j]
+            }
+            vec[i] = 0.0
+        }
+        return im1
     }
 
     public fun solve(b: ColumnVector): ColumnVector{
