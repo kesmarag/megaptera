@@ -45,14 +45,9 @@ abstract class Vector : Serializable, Cloneable {
         return Math.sqrt(result)
     }
 
-    operator public fun get(range: IntRange): Vector {
-        val vector: Vector
-        if (this.type == VectorType.COLUMN_VECTOR) {
-            vector = ColumnVector(range.count())
-        } else {
-            //if(this.type == VectorType.ROW_VECTOR){
-            vector = RowVector(range.count())
-        }
+    operator public fun get(range: IntRange): RowVector {
+        val vector: RowVector
+        vector = RowVector(range.count())
         val firstOfRange = range.start
         for (i in range) {
             vector[i - firstOfRange] = this[i]

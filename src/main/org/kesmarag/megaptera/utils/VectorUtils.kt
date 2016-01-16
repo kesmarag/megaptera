@@ -32,7 +32,15 @@ infix operator fun Int.times(vector: RowVector): RowVector = vector.times(this.t
 
 
 fun Math.exp(a: Double,vector: ColumnVector): ColumnVector{
-    val expaVector: ColumnVector = ColumnVector(vector.dimension)
+    val expaVector = ColumnVector(vector.dimension)
+    for (i in 0..vector.dimension-1){
+        expaVector[i] = Math.exp(a*vector[i])
+    }
+    return expaVector
+}
+
+fun Math.exp(a: Double, vector: RowVector) : RowVector{
+    val expaVector = RowVector(vector.dimension)
     for (i in 0..vector.dimension-1){
         expaVector[i] = Math.exp(a*vector[i])
     }

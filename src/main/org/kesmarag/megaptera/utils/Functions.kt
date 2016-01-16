@@ -34,3 +34,11 @@ fun softmax(vector: ColumnVector): ColumnVector {
 fun softmax(vector: RowVector): RowVector{
     return softmax(vector.t()).t()
 }
+
+fun exp(a:Double, vector: RowVector): RowVector{
+    val expVector = RowVector(vector.dimension)
+    for (i in 0..vector.dimension-1){
+        expVector[i] = Math.exp(vector[i]*a)
+    }
+    return expVector
+}
