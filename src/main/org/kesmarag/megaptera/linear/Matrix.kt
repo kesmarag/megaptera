@@ -12,5 +12,4 @@ abstract class Matrix: Serializable, Cloneable {
         columns = _columns
     }
 
-
 }

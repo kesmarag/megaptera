@@ -1,5 +1,7 @@
 package org.kesmarag.megaptera.linear
 
+import java.util.*
+
 class DenseMatrix(_rows: Int, _columns: Int) : Matrix(_rows, _columns) {
     override val type: MatrixType = MatrixType.DENSE
     private val elements = Array(rows) { i -> RowVector(columns) }
@@ -59,6 +61,14 @@ class DenseMatrix(_rows: Int, _columns: Int) : Matrix(_rows, _columns) {
             }
         }
         return newDense
+    }
+
+    public fun randomize(a:Double,b:Double){
+        for (i in 0..rows-1){
+            for (j in 0..columns-1){
+                this[i,j] = Random().nextDouble()*(b-a)+a
+            }
+        }
     }
 
     override fun toString(): String {

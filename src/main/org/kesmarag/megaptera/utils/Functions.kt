@@ -15,6 +15,10 @@ fun sigmoid(vector: ColumnVector): ColumnVector {
     return sigmoidVector
 }
 
+fun sigmoid(vector: RowVector): RowVector{
+    return sigmoid(vector.t()).t()
+}
+
 fun softmax(vector: ColumnVector): ColumnVector {
     var softmaxVector = ColumnVector(vector.dimension)
     var sumOfExp = 0.0
@@ -25,4 +29,8 @@ fun softmax(vector: ColumnVector): ColumnVector {
     }
     softmaxVector = softmaxVector*(1.0/sumOfExp)
     return softmaxVector
+}
+
+fun softmax(vector: RowVector): RowVector{
+    return softmax(vector.t()).t()
 }

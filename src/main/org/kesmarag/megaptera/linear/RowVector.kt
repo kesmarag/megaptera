@@ -82,5 +82,17 @@ class RowVector(_dimension: Int) : Vector(_dimension) {
         }
         return tmpVector
     }
+
+    operator fun times(denseMatrix: DenseMatrix): RowVector{
+        val tmpVector = RowVector(denseMatrix.columns)
+        for (j in 0..denseMatrix.columns-1){
+            var sum = 0.0
+            for (i in 0..dimension-1){
+                sum += this[i]*denseMatrix[i,j]
+            }
+            tmpVector[j] = sum
+        }
+        return tmpVector
+    }
 }
 
