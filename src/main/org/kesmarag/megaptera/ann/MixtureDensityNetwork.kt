@@ -1,5 +1,6 @@
 package org.kesmarag.megaptera.ann
 
+import org.kesmarag.megaptera.linear.ColumnVector
 import org.kesmarag.megaptera.linear.DenseMatrix
 
 class MixtureDensityNetwork {
@@ -10,6 +11,7 @@ class MixtureDensityNetwork {
     val W1 : DenseMatrix
     val W2 : DenseMatrix
 
+
     constructor(_inputs: Int, _hidden: Int, _outputs: Int, _mixtures: Int){
         inputs = _inputs
         hidden = _hidden
@@ -18,4 +20,9 @@ class MixtureDensityNetwork {
         W1 = DenseMatrix(inputs,hidden)
         W2 = DenseMatrix(hidden,outputs)
     }
+
+    public fun forward(inputVector: ColumnVector){
+
+    }
+
 }
