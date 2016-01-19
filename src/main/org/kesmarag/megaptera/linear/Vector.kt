@@ -45,9 +45,9 @@ abstract class Vector : Serializable, Cloneable {
         return Math.sqrt(result)
     }
 
-    operator public fun get(range: IntRange): RowVector {
-        val vector: RowVector
-        vector = RowVector(range.count())
+    operator public fun get(range: IntRange): ColumnVector {
+        val vector: ColumnVector
+        vector = ColumnVector(range.count())
         val firstOfRange = range.start
         for (i in range) {
             vector[i - firstOfRange] = this[i]

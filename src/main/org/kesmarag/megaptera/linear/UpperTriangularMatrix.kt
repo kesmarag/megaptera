@@ -6,7 +6,7 @@ class UpperTriangularMatrix(_dimension: Int) : Matrix(_dimension, _dimension) {
 
     operator fun get(i: Int, j: Int): Double {
         if (i <= j) {
-            return elements[i][j-i]
+            return elements[i][j - i]
         } else {
             return 0.0
         }
@@ -14,7 +14,7 @@ class UpperTriangularMatrix(_dimension: Int) : Matrix(_dimension, _dimension) {
 
     operator fun set(i: Int, j: Int, v: Double): Unit {
         if (i <= j) {
-            elements[i][j-i] = v
+            elements[i][j - i] = v
         }
     }
 
@@ -30,56 +30,67 @@ class UpperTriangularMatrix(_dimension: Int) : Matrix(_dimension, _dimension) {
 
     operator fun times(lower: LowerTriangularMatrix): DenseMatrix {
         val newDense = DenseMatrix(rows, rows)
-        for (i in 0..rows-1){
-            for (j in 0..rows-1){
+        for (i in 0..rows - 1) {
+            for (j in 0..rows - 1) {
                 var sum = 0.0
-                for (k in 0..rows-1){
-                    sum += this[i,k]*lower[k,j]
+                for (k in 0..rows - 1) {
+                    sum += this[i, k] * lower[k, j]
                 }
-                newDense[i,j] = sum
+                newDense[i, j] = sum
             }
         }
         return newDense
     }
 
-    public fun inv(): DenseMatrix{
-        val im1 = DenseMatrix(rows,rows)
+    public fun inv(): DenseMatrix {
+        val im1 = DenseMatrix(rows, rows)
         var vec = ColumnVector(rows)
         var x = ColumnVector(rows)
-        for (i in 0..rows-1){
+        for (i in 0..rows - 1) {
             vec[i] = 1.0
             x = this.solve(vec)
-            for (j in 0..rows-1){
-                im1[j,i] = x[j]
+            for (j in 0..rows - 1) {
+                im1[j, i] = x[j]
             }
             vec[i] = 0.0
         }
         return im1
     }
 
-    public fun solve(b: ColumnVector): ColumnVector{
+    public fun solve(b: ColumnVector): ColumnVector {
         val x = ColumnVector(rows)
-        for (i in rows-1 downTo 0){
+        for (i in rows - 1 downTo 0) {
             x[i] = b[i]
-            for (j in i+1..rows-1){
-                x[i] = x[i] - this[i,j]*x[j]
+            for (j in i + 1..rows - 1) {
+                x[i] = x[i] - this[i, j] * x[j]
             }
-            x[i] = x[i]/this[i,i]
+            x[i] = x[i] / this[i, i]
         }
         return x
     }
 
     override fun toString(): String {
         var str = ""
-        for (i in 0..rows-1){
+        for (i in 0..rows - 1) {
             str += "["
-            for (j in 0..columns-2){
-                str += "${this[i,j]}, "
+            for (j in 0..columns - 2) {
+                str += "${this[i, j]}, "
             }
-            str += "${this[i,columns-1]}]\n"
+            str += "${this[i, columns - 1]}]\n"
         }
         //str+="\n"
         return str
+    }
+
+    public fun fromVector(vector: Vector): Unit {
+        if (vector.dimension != (rows*rows+rows)/2){
+            throw IllegalStateException("incompatible dimension of the vector")
+        }
+        var offset = 0
+        var i = 0
+        var k = 0
+
+
     }
 
 

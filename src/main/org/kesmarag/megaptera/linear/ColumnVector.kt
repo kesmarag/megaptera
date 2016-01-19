@@ -16,7 +16,7 @@ class ColumnVector(_dimension: Int) : Vector(_dimension) {
     override val type = VectorType.COLUMN_VECTOR
 
     override fun toString(): String {
-        var str: String = "[\n"
+        var str: String = ".:: ColumnVector[${this.dimension}] ::.\n["
         for (i in 0..this.dimension-2){
             str = str + this[i].toString() + " \n"
         }
