@@ -18,6 +18,18 @@ class LowerTriangularMatrix(_dimension: Int) : Matrix(_dimension, _dimension) {
         }
     }
 
+    operator fun times(vector: ColumnVector) : ColumnVector{
+        val a = ColumnVector(rows)
+        for (i in 0..rows-1) {
+            var sum = 0.0
+            for (j in 0..columns - 1) {
+                sum += this[i, j] * vector[j]
+            }
+            a[i] = sum
+        }
+        return a
+    }
+
     public fun t(): UpperTriangularMatrix {
         val transpose = UpperTriangularMatrix(rows)
         for (i in 0..rows - 1) {

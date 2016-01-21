@@ -40,5 +40,6 @@ fun exp(a:Double, vector: RowVector): RowVector{
     for (i in 0..vector.dimension-1){
         expVector[i] = Math.exp(vector[i]*a)
     }
+
     return expVector
 }

@@ -8,12 +8,11 @@ fun main(args: Array<String>) {
     a.randomize(0.0,1.0)
     val mdn = MixtureDensityNetwork(2,3,2,2)
     val y = mdn(a)
+    y.fill(0.0)
     //val yHat = softmax(y)
    // println(yHat)
     val d = MixtureDensity(2,2)
     d.hyperParameters(y)
 
-    println("${d.weights[0]} <--> ${d.gamma(a,0)}")
-    println("${d.weights[1]} <--> ${d.gamma(a,1)}")
-    println(d.derivative(a))
+    println(d.derivative(y))
 }

@@ -33,7 +33,7 @@ class MixtureDensity {
         }
         weights = output[0..mixtures - 1]
         weights = softmax(weights)
-        println(weights)
+        //println(weights)
         var k = mixtures
         for (i in 0..mixtures - 1) {
             for (j in 0..dimension - 1) {
@@ -109,9 +109,49 @@ class MixtureDensity {
 
     public fun derivative(x: ColumnVector): ColumnVector{
         val y = ColumnVector(x.dimension)
-        for (i in 0..mixtures-1){
-            y[i] = weights[i] - gamma(x,i)
+        val z = ColumnVector(2)
+        z[0] = -1.0
+        z[1] = 0.5
+        println(x.dimension)
+        val etta = Array(mixtures) {ColumnVector(dimension)}
+        for (m in 0..mixtures-1){
+            //etta[m] = x[dimension*(m+1)..(dimension*(m+1)+dimension-1)] - means[m]
+            etta[m] = z - means[m]
         }
+        val xi = Array(mixtures) {ColumnVector(dimension)}
+        for (m in 0..mixtures-1){
+            xi[m] = alphas[m]*etta[m]
+        }
+        val phi = Array(mixtures) {ColumnVector(dimension)}
+        for (m in 0..mixtures-1){
+            phi[m] = alphas[m].t()*xi[m]
+        }
+        for (i in 0..mixtures-1){
+            y[i] = weights[i] - gamma(z,i)
+        }
+        var k = mixtures
+        for (i in 0..mixtures - 1) {
+            for (j in 0..dimension - 1) {
+                y[k] = phi[i][j]*gamma(z,i)
+                k++
+            }
+        }
+        for (i in 0..mixtures - 1) {
+            for (j in 0..dimension - 1) {
+                y[k] = gamma(z,i)*(-1+xi[i][j]*alphas[i][j,j]*etta[i][j])
+                k++
+            }
+        }
+        for (m in 0..mixtures - 1) {
+            for (i in 0..dimension - 1) {
+                for (j in i + 1..dimension - 1) {
+                    y[k] = gamma(z,m)*xi[m][i]*etta[m][j]
+                    k++
+                }
+            }
+        }
+
+
         return y
     }
 
