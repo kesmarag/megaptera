@@ -74,5 +74,11 @@ class ColumnVector(_dimension: Int) : Vector(_dimension) {
         return tmpVector
     }
 
+    public fun fill(a: Double): Unit{
+        for (i in 0..dimension-1){
+            elements[i] = a
+        }
+    }
+
 }
 

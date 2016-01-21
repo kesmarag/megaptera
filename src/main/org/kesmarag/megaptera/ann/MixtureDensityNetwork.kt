@@ -50,9 +50,11 @@ class MixtureDensityNetwork {
         var alphas = Array(mixtures) { UpperTriangularMatrix(outputs) }
         var alphasVector = a2[pointer..a2.dimension - 1]
         val perMixture = alphasVector.dimension / mixtures
-        MixtureDensity(mixtures,outputs,a2)
+        MixtureDensity(mixtures,outputs)
         return a2
     }
+
+
 
     operator fun invoke(inputVector: ColumnVector): ColumnVector {
         return this.apply(inputVector)
