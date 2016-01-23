@@ -44,7 +44,6 @@ class MixtureDensity {
 
         for (m in 0..mixtures - 1) {
             for (i in 0..dimension - 1) {
-                println(k)
                 alphas[m][i, i] = Math.exp(output[k])
                 k++
             }
@@ -52,7 +51,6 @@ class MixtureDensity {
         for (m in 0..mixtures - 1) {
             for (i in 0..dimension - 1) {
                 for (j in i + 1..dimension - 1) {
-                    println(k)
                     alphas[m][i, j] = output[k]
                     k++
                 }
@@ -107,16 +105,12 @@ class MixtureDensity {
         return 1.0/g
     }
 
-    public fun derivative(x: ColumnVector): ColumnVector{
-        val y = ColumnVector(x.dimension)
-        val z = ColumnVector(2)
-        z[0] = -1.0
-        z[1] = 0.5
-        println(x.dimension)
+    public fun derivative(out: ColumnVector): ColumnVector{
+        val y = ColumnVector((dimension * dimension + 3 * dimension + 2) * mixtures / 2)
         val etta = Array(mixtures) {ColumnVector(dimension)}
         for (m in 0..mixtures-1){
             //etta[m] = x[dimension*(m+1)..(dimension*(m+1)+dimension-1)] - means[m]
-            etta[m] = z - means[m]
+            etta[m] =  means[m] - out
         }
         val xi = Array(mixtures) {ColumnVector(dimension)}
         for (m in 0..mixtures-1){
@@ -127,25 +121,25 @@ class MixtureDensity {
             phi[m] = alphas[m].t()*xi[m]
         }
         for (i in 0..mixtures-1){
-            y[i] = weights[i] - gamma(z,i)
+            y[i] = weights[i] - gamma(out,i)
         }
         var k = mixtures
         for (i in 0..mixtures - 1) {
             for (j in 0..dimension - 1) {
-                y[k] = phi[i][j]*gamma(z,i)
+                y[k] = phi[i][j]*gamma(out,i)
                 k++
             }
         }
         for (i in 0..mixtures - 1) {
             for (j in 0..dimension - 1) {
-                y[k] = gamma(z,i)*(-1+xi[i][j]*alphas[i][j,j]*etta[i][j])
+                y[k] = gamma(out,i)*(-1.0+xi[i][j]*alphas[i][j,j]*etta[i][j])
                 k++
             }
         }
         for (m in 0..mixtures - 1) {
             for (i in 0..dimension - 1) {
                 for (j in i + 1..dimension - 1) {
-                    y[k] = gamma(z,m)*xi[m][i]*etta[m][j]
+                    y[k] = gamma(out,m)*xi[m][i]*etta[m][j]
                     k++
                 }
             }

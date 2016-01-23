@@ -53,6 +53,26 @@ class DenseMatrix(_rows: Int, _columns: Int) : Matrix(_rows, _columns) {
         return newDense
     }
 
+    operator fun times(a: Double): DenseMatrix{
+        val newDense = DenseMatrix(rows, columns)
+        for (i in 0..rows-1){
+            for (j in 0..columns-1){
+                newDense[i,j] = a*this[i,j]
+            }
+        }
+        return newDense
+    }
+
+    operator fun minus(other: DenseMatrix): DenseMatrix{
+        val newDense = DenseMatrix(rows, columns)
+        for (i in 0..rows-1){
+            for (j in 0..columns-1){
+                newDense[i,j] = this[i,j] - other[i,j]
+            }
+        }
+        return newDense
+    }
+
     public fun t(): DenseMatrix{
         val newDense = DenseMatrix(columns,rows)
         for (i in 0..columns-1){
