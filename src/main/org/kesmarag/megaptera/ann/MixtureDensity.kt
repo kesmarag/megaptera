@@ -121,7 +121,7 @@ class MixtureDensity {
             phi[m] = alphas[m].t()*xi[m]
         }
         for (i in 0..mixtures-1){
-            y[i] = weights[i] - gamma(out,i)
+            y[i] =( weights[i] - gamma(out,i))
         }
         var k = mixtures
         for (i in 0..mixtures - 1) {
@@ -147,6 +147,18 @@ class MixtureDensity {
 
 
         return y
+    }
+
+    override fun toString(): String {
+        var str = ".:: Gaussian Mixture ::.\n"
+        str += "weights = ${weights.t().toString()}"
+        for (i in 0..mixtures-1){
+            str += "mu[${i+1}] = ${means[i].t().toString()}"
+        }
+        for (i in 0..mixtures-1){
+            str += "sigma[${i+1}] = ${alphas[i].inv()*(alphas[i].inv()).t()}"
+        }
+        return str
     }
 
     public fun toFile() {

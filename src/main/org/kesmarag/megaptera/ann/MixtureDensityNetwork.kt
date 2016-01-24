@@ -2,9 +2,7 @@ package org.kesmarag.megaptera.ann
 
 import org.kesmarag.megaptera.linear.ColumnVector
 import org.kesmarag.megaptera.linear.DenseMatrix
-import org.kesmarag.megaptera.linear.UpperTriangularMatrix
 import org.kesmarag.megaptera.utils.sigmoid
-import org.kesmarag.megaptera.utils.softmax
 
 class MixtureDensityNetwork {
     public val inputs: Int
@@ -58,21 +56,29 @@ class MixtureDensityNetwork {
             d1[i] = tmp[i] * sigmoid(a1[i]) * (1 - sigmoid(a1[i]))
         }
         var dEdW1 = DenseMatrix(hidden, inputs)
-        for (i in 0..hidden-1){
-            for (j in 0..inputs-1){
-                dEdW1[i,j]= d1[i]*inputVector[j]
+        for (i in 0..hidden - 1) {
+            for (j in 0..inputs - 1) {
+                dEdW1[i, j] = d1[i] * inputVector[j]
+                if (dEdW1[i, j].isNaN()) {
+                    dEdW1[i, j] = 0.0
+                    //println("NaN")
+                }
             }
         }
         //println(dEdW1)
         var dEdW2 = DenseMatrix((outputs * outputs + 3 * outputs + 2) * mixtures / 2, hidden)
-        for (i in 0..(outputs * outputs + 3 * outputs + 2) * mixtures / 2 -1){
-            for (j in 0..hidden-1){
-                dEdW2[i,j]= d2[i]*z1[j]
+        for (i in 0..(outputs * outputs + 3 * outputs + 2) * mixtures / 2 - 1) {
+            for (j in 0..hidden - 1) {
+                dEdW2[i, j] = d2[i] * z1[j]
+                if (dEdW2[i, j].isNaN()) {
+                    dEdW2[i, j] = 0.0
+                    //println("NaN")
+                }
             }
         }
-       // println(dEdW2)
-        W1 = W1 - dEdW1*lambda
-        W2 = W2 - dEdW2*lambda
+        //println(dEdW2)
+        W1 = W1 - dEdW1 * lambda
+        W2 = W2 - dEdW2 * lambda
 
     }
 
