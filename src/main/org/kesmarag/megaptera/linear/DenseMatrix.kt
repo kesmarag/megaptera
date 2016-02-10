@@ -63,6 +63,16 @@ class DenseMatrix(_rows: Int, _columns: Int) : Matrix(_rows, _columns) {
         return newDense
     }
 
+    operator fun plus(other: DenseMatrix): DenseMatrix{
+        val newDense = DenseMatrix(rows, columns)
+        for (i in 0..rows-1){
+            for (j in 0..columns-1){
+                newDense[i,j] = this[i,j] + other[i,j]
+            }
+        }
+        return newDense
+    }
+
     operator fun minus(other: DenseMatrix): DenseMatrix{
         val newDense = DenseMatrix(rows, columns)
         for (i in 0..rows-1){
@@ -91,6 +101,16 @@ class DenseMatrix(_rows: Int, _columns: Int) : Matrix(_rows, _columns) {
         }
     }
 
+    override public fun clone(): DenseMatrix{
+        val cloned = DenseMatrix(rows,columns)
+        for (i in 0..rows-1){
+            for (j in 0..columns-1){
+                cloned[i,j] = this[i,j]
+            }
+        }
+        return cloned
+    }
+
     override fun toString(): String {
         var str = ""
         for (i in 0..rows-1){
@@ -99,5 +119,13 @@ class DenseMatrix(_rows: Int, _columns: Int) : Matrix(_rows, _columns) {
         str+="\n"
         return str
     }
+
+    //operator fun plusAssign(other: DenseMatrix): DenseMatrix{
+    //    return this.plus(other)
+    //}
+
+    //operator fun minusAssign(other: DenseMatrix): DenseMatrix{
+    //    return this.minus(other)
+    //}
 
 }

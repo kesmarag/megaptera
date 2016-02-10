@@ -16,6 +16,7 @@ class ObservationSet(owner: Int = 0) : Property(owner), Serializable {
         size++
     }
 
+
     public fun standardize(): Unit {
         var sArray: DoubleArray = DoubleArray(data[0].length)
         var sdArray: DoubleArray = DoubleArray(data[0].length)

@@ -71,7 +71,7 @@ class GaussianHiddenMarkovModel(var dataSet: DataSet,
                 }
                 .filter { isOwned(it.second) }
                 .map { it -> it.first }
-                .toArrayList()
+                .toMutableList()
                 isUpdated = false
     }
 

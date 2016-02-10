@@ -68,7 +68,7 @@ fun main(args: Array<String>) {
             .sortedBy { it.label }
             .forEachIndexed { i, oS ->
                 //println(oS.label)
-                csvFilePrinter.printRecord(oS.scores.toArrayList())
+                csvFilePrinter.printRecord(oS.scores.toMutableList())
             }
 
     writer.flush();

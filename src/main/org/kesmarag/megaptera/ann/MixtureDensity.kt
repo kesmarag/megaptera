@@ -74,16 +74,15 @@ class MixtureDensity {
         return d
     }
 
-    operator fun get(x: ColumnVector, m: Int): Double{
-        val Ah = alphas[m]*(x-means[m])
-       // println(Ah.norm2())
+    operator fun get(t: ColumnVector, m: Int): Double{
+        val Ah = alphas[m]*(t-means[m])
         return -0.5*(dimension*ln2pi + Math.log(detSigma(m))+Ah.norm2()) + Math.log(weights[m])
     }
 
-    operator fun get(x: ColumnVector): Double{
+    operator fun get(t: ColumnVector): Double{
         val logDensityArray: DoubleArray = DoubleArray(mixtures)
         for (m in 0..mixtures - 1) {
-            logDensityArray[m] = this[x, m]
+            logDensityArray[m] = this[t, m]
         }
         val maxLogDensity: Double = logDensityArray.max() ?: 1.0
         var sum: Double = 0.0
@@ -109,7 +108,6 @@ class MixtureDensity {
         val y = ColumnVector((dimension * dimension + 3 * dimension + 2) * mixtures / 2)
         val etta = Array(mixtures) {ColumnVector(dimension)}
         for (m in 0..mixtures-1){
-            //etta[m] = x[dimension*(m+1)..(dimension*(m+1)+dimension-1)] - means[m]
             etta[m] =  means[m] - out
         }
         val xi = Array(mixtures) {ColumnVector(dimension)}
@@ -121,7 +119,7 @@ class MixtureDensity {
             phi[m] = alphas[m].t()*xi[m]
         }
         for (i in 0..mixtures-1){
-            y[i] =( weights[i] - gamma(out,i))
+            y[i] = (weights[i] - gamma(out,i))
         }
         var k = mixtures
         for (i in 0..mixtures - 1) {
@@ -144,8 +142,6 @@ class MixtureDensity {
                 }
             }
         }
-
-
         return y
     }
 

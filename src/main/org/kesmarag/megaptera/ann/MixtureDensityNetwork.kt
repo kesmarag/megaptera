@@ -20,9 +20,9 @@ class MixtureDensityNetwork {
         outputs = _outputs
         mixtures = _mixtures
         W1 = DenseMatrix(hidden, inputs)
-        W1.randomize(-1.0, 1.0)
+        W1.randomize(-1.5, 1.5)
         W2 = DenseMatrix((outputs * outputs + 3 * outputs + 2) * mixtures / 2, hidden)
-        W2.randomize(-1.0, 1.0)
+        W2.randomize(-1.5, 1.5)
     }
 
     public fun getMixtureDensity(): MixtureDensity? {
@@ -32,21 +32,33 @@ class MixtureDensityNetwork {
     public fun apply(inputVector: ColumnVector): ColumnVector {
         val a1 = W1 * inputVector
         val z1 = sigmoid(a1)
+        //val z1 = tanhBased(a1)
         val a2 = W2 * z1
-        val md = MixtureDensity(mixtures, outputs)
-        md.hyperParameters(a2)
         return a2
     }
 
+    public fun error(inputVector: ColumnVector, targetVector: ColumnVector): Double{
+        val a2 = apply(inputVector)
+        val md = MixtureDensity(mixtures, outputs)
+        md.hyperParameters(a2)
+        return md[targetVector]
+    }
 
-    public fun derivativeOut(inputVector: ColumnVector, outputVector: ColumnVector) {
+    public fun derivativeCheck(){
 
     }
 
+
+
+
     public fun adaptOne(inputVector: ColumnVector, outputVector: ColumnVector, lambda: Double) {
+        var cloneW1 = W1.clone()
+        var cloneW2 = W2.clone()
         val a1 = W1 * inputVector
         val z1 = sigmoid(a1)
+        //val z1 = tanhBased(a1)
         val a2 = W2 * z1
+        //println("${a2[0]} <--> ${a2[1]}")
         val md = MixtureDensity(mixtures, outputs)
         md.hyperParameters(a2)
         val d2 = md.derivative(outputVector)
@@ -54,15 +66,13 @@ class MixtureDensityNetwork {
         val tmp = W2.t() * d2
         for (i in 0..hidden - 1) {
             d1[i] = tmp[i] * sigmoid(a1[i]) * (1 - sigmoid(a1[i]))
+            //d1[i] = tmp[i] * (1.7159-tanhBased(a1[i])*tanhBased(a1[i]))*2.0/3.0
         }
         var dEdW1 = DenseMatrix(hidden, inputs)
         for (i in 0..hidden - 1) {
             for (j in 0..inputs - 1) {
+
                 dEdW1[i, j] = d1[i] * inputVector[j]
-                if (dEdW1[i, j].isNaN()) {
-                    dEdW1[i, j] = 0.0
-                    //println("NaN")
-                }
             }
         }
         //println(dEdW1)
@@ -70,15 +80,12 @@ class MixtureDensityNetwork {
         for (i in 0..(outputs * outputs + 3 * outputs + 2) * mixtures / 2 - 1) {
             for (j in 0..hidden - 1) {
                 dEdW2[i, j] = d2[i] * z1[j]
-                if (dEdW2[i, j].isNaN()) {
-                    dEdW2[i, j] = 0.0
-                    //println("NaN")
-                }
             }
         }
         //println(dEdW2)
         W1 = W1 - dEdW1 * lambda
         W2 = W2 - dEdW2 * lambda
+        //println(W1[0,0])
 
     }
 
