@@ -41,7 +41,7 @@ class MixtureDensityNetwork {
         val a2 = apply(inputVector)
         val md = MixtureDensity(mixtures, outputs)
         md.hyperParameters(a2)
-        return md[targetVector]
+        return -md[targetVector]
     }
 
     public fun derivativeCheck(){
@@ -52,6 +52,7 @@ class MixtureDensityNetwork {
 
 
     public fun adaptOne(inputVector: ColumnVector, outputVector: ColumnVector, lambda: Double) {
+        val epsilon = 0.000001
         var cloneW1 = W1.clone()
         var cloneW2 = W2.clone()
         val a1 = W1 * inputVector
@@ -71,8 +72,15 @@ class MixtureDensityNetwork {
         var dEdW1 = DenseMatrix(hidden, inputs)
         for (i in 0..hidden - 1) {
             for (j in 0..inputs - 1) {
-
                 dEdW1[i, j] = d1[i] * inputVector[j]
+                W1[i,j] = W1[i,j] + epsilon
+                val errorPlus = this.error(inputVector,outputVector)
+                W1[i,j] = W1[i,j] - 2*epsilon
+                val errorMinus = this.error(inputVector,outputVector)
+                val derivativeEstimator = (errorPlus-errorMinus)/(2*epsilon)
+                //println("backprop = ${dEdW1[i,j]} , estimator = $derivativeEstimator")
+                W1[i,j] = W1[i,j] + epsilon
+                dEdW1[i, j] = derivativeEstimator
             }
         }
         //println(dEdW1)
@@ -80,6 +88,14 @@ class MixtureDensityNetwork {
         for (i in 0..(outputs * outputs + 3 * outputs + 2) * mixtures / 2 - 1) {
             for (j in 0..hidden - 1) {
                 dEdW2[i, j] = d2[i] * z1[j]
+                W2[i,j] = W2[i,j] + epsilon
+                val errorPlus = this.error(inputVector,outputVector)
+                W2[i,j] = W2[i,j] - 2*epsilon
+                val errorMinus = this.error(inputVector,outputVector)
+                val derivativeEstimator = (errorPlus-errorMinus)/(2*epsilon)
+                //println("(i=$i,j=$j) backprop = ${dEdW2[i,j]} , estimator = $derivativeEstimator")
+                W2[i,j] = W2[i,j] + epsilon
+                dEdW2[i, j] = derivativeEstimator
             }
         }
         //println(dEdW2)

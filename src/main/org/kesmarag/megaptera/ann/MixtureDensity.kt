@@ -11,7 +11,7 @@ class MixtureDensity {
     public var weights: ColumnVector
     public var means: Array<ColumnVector>
     public var alphas: Array<UpperTriangularMatrix>
-    private val ln2pi = Math.log(Math.PI)
+    private val ln2pi = Math.log(2*Math.PI)
 
     constructor(_mixtures: Int, _dimension: Int) {
         mixtures = _mixtures
@@ -76,7 +76,7 @@ class MixtureDensity {
 
     operator fun get(t: ColumnVector, m: Int): Double{
         val Ah = alphas[m]*(t-means[m])
-        return -0.5*(dimension*ln2pi + Math.log(detSigma(m))+Ah.norm2()) + Math.log(weights[m])
+        return -0.5*(dimension*ln2pi + Math.log(detSigma(m))+Ah.sumOfSquares()) + Math.log(weights[m])
     }
 
     operator fun get(t: ColumnVector): Double{

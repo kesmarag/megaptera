@@ -39,11 +39,19 @@ abstract class Vector : Serializable, Cloneable {
         return result
     }
 
+    public fun sumOfSquares(): Double {
+        var result = 0.0
+        elements.forEach { result += it * it }
+        return result
+    }
+
     public fun norm2(): Double {
         var result = 0.0
         elements.forEach { result += it * it }
         return Math.sqrt(result)
     }
+
+
 
     operator public fun get(range: IntRange): ColumnVector {
         val vector: ColumnVector
