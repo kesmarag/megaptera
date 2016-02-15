@@ -3,6 +3,7 @@ package org.kesmarag.megaptera.ann
 import org.kesmarag.megaptera.linear.ColumnVector
 import org.kesmarag.megaptera.linear.UpperTriangularMatrix
 import org.kesmarag.megaptera.utils.softmax
+import org.kesmarag.megaptera.utils.softmax2
 
 
 class MixtureDensity {
@@ -31,20 +32,30 @@ class MixtureDensity {
         if ((dimension * dimension + 3 * dimension + 2) * mixtures / 2 != output.dimension) {
             throw IllegalStateException("wrong dimension")
         }
+        //println("#### Mixtures values - Start ####")
+        //for (mm in 0..mixtures-1){
+          //  println(mm)
+        //}
+        //println("#### Mixtures values - Start ####")
         weights = output[0..mixtures - 1]
         weights = softmax(weights)
         //println(weights)
         var k = mixtures
+        //println("#### Mean values - Start ####")
         for (i in 0..mixtures - 1) {
             for (j in 0..dimension - 1) {
-                means[i][j] = output[i * dimension + j + dimension]
+                means[i][j] = output[i * dimension + j + mixtures]
+                //println(i * dimension + j + mixtures)
                 k++
             }
         }
+        //println("#### Mean values - End ####")
 
+        //println("#### Covariances - Start ####")
         for (m in 0..mixtures - 1) {
             for (i in 0..dimension - 1) {
                 alphas[m][i, i] = Math.exp(output[k])
+          //      println(k)
                 k++
             }
         }
@@ -52,10 +63,12 @@ class MixtureDensity {
             for (i in 0..dimension - 1) {
                 for (j in i + 1..dimension - 1) {
                     alphas[m][i, j] = output[k]
+            //        println(k)
                     k++
                 }
             }
         }
+        //println("#### Covariances - end ####")
     }
 
     public fun detSigma(m: Int) : Double{

@@ -50,7 +50,7 @@ class GhmmClustering(val dataSet: DataSet, val clusters: Int = 3, val states: In
                 it.scores[k] = ghmm[k].posterior(it)
             }
         }
-        /*
+
         dataSet.members.forEach {
             val min_score: Double = it.scores.min()?.toDouble() ?: 0.0
             val max_score: Double = it.scores.max()?.toDouble() ?: 0.0
@@ -58,7 +58,8 @@ class GhmmClustering(val dataSet: DataSet, val clusters: Int = 3, val states: In
                 it.scores[k] = (it.scores[k] - min_score) / (max_score - min_score)
             }
         }
-        */
+
+        /*
         var mean = DoubleArray(clusters)
         dataSet.members.forEach {
             for (k in 0..clusters-1){
@@ -76,6 +77,7 @@ class GhmmClustering(val dataSet: DataSet, val clusters: Int = 3, val states: In
                 it.scores[k] = (it.scores[k]-mean[k]/dataSet.size.toDouble())/Math.sqrt(varianceN[k]/dataSet.size.toDouble())
             }
         }
+        */
     }
 
     private fun updateOwnerships() {

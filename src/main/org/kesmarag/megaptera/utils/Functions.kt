@@ -44,6 +44,19 @@ fun softmax(vector: ColumnVector): ColumnVector {
     return softmaxVector
 }
 
+fun softmax2(vector: ColumnVector): ColumnVector {
+    var softmaxVector = ColumnVector(vector.dimension)
+    var sumOfExp = 0.0
+    for (i in 0..vector.dimension - 1) {
+        val exp = Math.exp(vector[i]*10.0)
+        sumOfExp += exp
+        softmaxVector[i] = exp
+    }
+    softmaxVector = softmaxVector * (1.0 / sumOfExp)
+    println("softmax <-$softmaxVector")
+    return softmaxVector
+}
+
 fun softmax(vector: RowVector): RowVector {
     return softmax(vector.t()).t()
 }

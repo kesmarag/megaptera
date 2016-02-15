@@ -3,7 +3,7 @@ package org.kesmarag.megaptera.utils
 import java.io.Serializable
 
 class ObservationSet(owner: Int = 0) : Property(owner), Serializable {
-    public var data: MutableList<Observation> = arrayListOf()
+    public var data: MutableList<Observation> = mutableListOf()
         private set
     public var size: Int = 0
         private set
