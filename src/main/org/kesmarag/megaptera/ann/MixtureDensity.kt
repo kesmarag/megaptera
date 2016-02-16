@@ -39,6 +39,7 @@ class MixtureDensity {
         //println("#### Mixtures values - Start ####")
         weights = output[0..mixtures - 1]
         weights = softmax(weights)
+
         //println(weights)
         var k = mixtures
         //println("#### Mean values - Start ####")
@@ -109,11 +110,13 @@ class MixtureDensity {
         val logDensityArray: DoubleArray = DoubleArray(mixtures)
         for (m in 0..mixtures - 1) {
             logDensityArray[m] = this[x, m]
+            //println(logDensityArray[m])
         }
         var g = 0.0
         for (i in 0..mixtures- 1) {
             g += Math.exp(logDensityArray[i] - logDensityArray[m])
         }
+        //println(1.0/g)
         return 1.0/g
     }
 
@@ -132,7 +135,7 @@ class MixtureDensity {
             phi[m] = alphas[m].t()*xi[m]
         }
         for (i in 0..mixtures-1){
-            y[i] = (weights[i] - gamma(out,i))
+            y[i] = (weights[i] - gamma(out,i))*1.0
         }
         var k = mixtures
         for (i in 0..mixtures - 1) {
@@ -143,6 +146,7 @@ class MixtureDensity {
         }
         for (i in 0..mixtures - 1) {
             for (j in 0..dimension - 1) {
+                //println(gamma(out,i))
                 y[k] = gamma(out,i)*(-1.0+xi[i][j]*alphas[i][j,j]*etta[i][j])
                 k++
             }
