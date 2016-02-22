@@ -1,9 +1,9 @@
 package org.kesmarag.megaptera.hmm
 
+import org.kesmarag.megaptera.data.DataSet
+import org.kesmarag.megaptera.data.ObservationSet
 import org.kesmarag.megaptera.distributions.GaussianMixtureDensity
 import org.kesmarag.megaptera.kmeans.Kmeans
-import org.kesmarag.megaptera.utils.DataSet
-import org.kesmarag.megaptera.utils.ObservationSet
 import org.kesmarag.megaptera.utils.Owner
 import java.io.Serializable
 import java.util.concurrent.ExecutorService

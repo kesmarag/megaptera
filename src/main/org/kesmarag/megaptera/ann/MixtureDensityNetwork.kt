@@ -1,5 +1,7 @@
 package org.kesmarag.megaptera.ann
 
+import org.kesmarag.megaptera.data.Observation
+import org.kesmarag.megaptera.data.ObservationSet
 import org.kesmarag.megaptera.linear.ColumnVector
 import org.kesmarag.megaptera.linear.DenseMatrix
 import org.kesmarag.megaptera.utils.*
@@ -43,6 +45,8 @@ class MixtureDensityNetwork {
         return a2
     }
 
+
+
     public fun error(inputVector: ColumnVector, targetVector: ColumnVector): Double{
         val a2 = apply(inputVector)
         val md = MixtureDensity(mixtures, outputs)
@@ -56,6 +60,8 @@ class MixtureDensityNetwork {
                                 steps: Int,
                                 lambda: Double,
                                 learning: Int){
+        var lambdaLocal = lambda
+        var bool = true
         val dataSize = data.size
         val length = data[0].length
         val epsilon = 0.001 // checking the derivatives using finite differences
@@ -117,15 +123,27 @@ class MixtureDensityNetwork {
                 }
 
             }
-            W1 = W1 - dEdW1 * (lambda/batchSize.toDouble())*(learning.toDouble()/(learning.toDouble()+s.toDouble()))
-            W2 = W2 - dEdW2 * (lambda/batchSize.toDouble())*(learning.toDouble()/(learning.toDouble()+s.toDouble()))
+            W1 = W1 - dEdW1 *(lambdaLocal/batchSize.toDouble())*(learning.toDouble()/(learning.toDouble()+s.toDouble()))
+            W2 = W2 - dEdW2 * (lambdaLocal/batchSize.toDouble())*(learning.toDouble()/(learning.toDouble()+s.toDouble()))
             //println((lambda/batchSize.toDouble())*(learning.toDouble()/(learning.toDouble()+s.toDouble())))
             println(this.error(data[841].data.toColumnVector(),targets[841].data.toColumnVector()))
             //println(W2)
-            //if (this.error(data[1681].data.toColumnVector(),targets[841].data.toColumnVector())<0) break
+            if (this.error(data[841].data.toColumnVector(),targets[841].data.toColumnVector())<0 && bool == true) {
+                lambdaLocal *= 0.1
+                bool = false
+            }
         }
     }
 
+    public fun trainingBatchSGD(odata: ObservationSet,
+                                otargets: ObservationSet,
+                                batchSize: Int,
+                                steps: Int,
+                                lambda: Double,
+                                learning: Int){
+        trainingBatchSGD(odata.data,otargets.data,batchSize,steps,lambda,learning)
+
+    }
 
     operator fun invoke(inputVector: ColumnVector): ColumnVector {
         return this.apply(inputVector)

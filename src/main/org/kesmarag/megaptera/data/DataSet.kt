@@ -1,6 +1,7 @@
-package org.kesmarag.megaptera.utils
+package org.kesmarag.megaptera.data
 
 import org.apache.commons.csv.CSVFormat
+import org.kesmarag.megaptera.utils.listOfFiles
 import java.io.File
 import java.io.FileReader
 import java.io.Reader

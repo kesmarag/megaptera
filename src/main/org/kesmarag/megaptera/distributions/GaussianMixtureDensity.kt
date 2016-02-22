@@ -1,6 +1,6 @@
 package org.kesmarag.megaptera.distributions
 
-import org.kesmarag.megaptera.utils.Observation
+import org.kesmarag.megaptera.data.Observation
 import java.io.Serializable
 
 class GaussianMixtureDensity(public var weights: DoubleArray,

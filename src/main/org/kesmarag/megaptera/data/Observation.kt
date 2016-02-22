@@ -1,5 +1,6 @@
-package org.kesmarag.megaptera.utils
+package org.kesmarag.megaptera.data
 
+import org.kesmarag.megaptera.utils.Property
 import java.io.Serializable
 
 class Observation : Property, Serializable{

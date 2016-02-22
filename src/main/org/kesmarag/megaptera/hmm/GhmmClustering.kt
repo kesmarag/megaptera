@@ -1,6 +1,6 @@
 package org.kesmarag.megaptera.hmm
 
-import org.kesmarag.megaptera.utils.DataSet
+import org.kesmarag.megaptera.data.DataSet
 import java.io.Serializable
 import java.util.*
 import java.util.concurrent.ExecutorService

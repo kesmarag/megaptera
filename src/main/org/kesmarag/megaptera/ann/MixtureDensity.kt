@@ -1,9 +1,12 @@
 package org.kesmarag.megaptera.ann
 
+import org.kesmarag.megaptera.data.Observation
+import org.kesmarag.megaptera.data.ObservationSet
 import org.kesmarag.megaptera.linear.ColumnVector
 import org.kesmarag.megaptera.linear.UpperTriangularMatrix
 import org.kesmarag.megaptera.utils.softmax
 import org.kesmarag.megaptera.utils.softmax2
+import org.kesmarag.megaptera.utils.toColumnVector
 
 
 class MixtureDensity {
@@ -26,6 +29,10 @@ class MixtureDensity {
                 alphas[m][i, i] = 1.0
             }
         }
+    }
+
+    public fun hyperParameters(mdn:MixtureDensityNetwork, data: ObservationSet, i: Int ): Unit{
+        this.hyperParameters(mdn.apply(data[i].data.toColumnVector()))
     }
 
     public fun hyperParameters(output: ColumnVector): Unit {
@@ -160,6 +167,18 @@ class MixtureDensity {
             }
         }
         return y
+    }
+
+    public fun getWeight(m: Int): Double{
+        return weights[m]
+    }
+
+    public fun getMean(m: Int, i: Int): Double{
+        return means[m][i]
+    }
+
+    public fun getSigma(m: Int, i: Int, j: Int): Double{
+        return (alphas[m].inv()*(alphas[m].inv()).t()).get(i,j)
     }
 
     override fun toString(): String {

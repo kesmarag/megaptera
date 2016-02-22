@@ -2,8 +2,8 @@ package org.kesmarag.megaptera.scripts
 
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
+import org.kesmarag.megaptera.data.DataSet
 import org.kesmarag.megaptera.hmm.GhmmClustering
-import org.kesmarag.megaptera.utils.DataSet
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileWriter

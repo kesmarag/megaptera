@@ -1,6 +1,6 @@
 package org.kesmarag.megaptera.hmm
 
-import org.kesmarag.megaptera.utils.ObservationSet
+import org.kesmarag.megaptera.data.ObservationSet
 import java.io.Serializable
 
 class ForwardBackward(var hmm: GaussianHiddenMarkovModel,
