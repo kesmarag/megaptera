@@ -98,6 +98,7 @@ class MixtureDensityNetwork {
                 val d1 = ColumnVector(hidden)
                 val tmp = W2.t() * d2
                 for (i in 0..hidden - 1) {
+
                     //d1[i] = tmp[i] * sigmoid(a1[i]) * (1 - sigmoid(a1[i]))
                     // derivative of the activation function tanhBased
                     d1[i] = tmp[i] * (1.7159-tanhBased(a1[i])*tanhBased(a1[i])/1.7159)*2.0/3.0
