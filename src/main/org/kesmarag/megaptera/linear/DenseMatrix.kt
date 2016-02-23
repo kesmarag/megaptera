@@ -167,9 +167,21 @@ class DenseMatrix(_rows: Int, _columns: Int) : Matrix(_rows, _columns) {
         return str
     }
 
-    //operator fun plusAssign(other: DenseMatrix): DenseMatrix{
-    //    return this.plus(other)
-    //}
+    operator fun plusAssign(other: DenseMatrix): Unit{
+        for (i in 0..rows-1){
+            for (j in 0..columns-1){
+                this[i,j] = this[i,j] + other[i,j]
+            }
+        }
+    }
+
+    operator fun minusAssign(other: DenseMatrix): Unit{
+        for (i in 0..rows-1){
+            for (j in 0..columns-1){
+                this[i,j] = this[i,j] - other[i,j]
+            }
+        }
+    }
 
     //operator fun minusAssign(other: DenseMatrix): DenseMatrix{
     //    return this.minus(other)

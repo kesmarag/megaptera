@@ -16,7 +16,7 @@ fun main(args: Array<String>){
     val mdn = MixtureDensityNetwork(7,10000, 2, 14)
     val md = MixtureDensity(14, 2)
 
-    mdn.trainingBatchSGD(data,targets,1,200000,0.01,50000)
+    mdn.trainingBatchSGD(data,targets,1,200000,0.01,50000,0.1,1000)
    // val n1 = mdn.apply(data[840].data.toColumnVector())
     //md.hyperParameters(n1)
    // println(md)

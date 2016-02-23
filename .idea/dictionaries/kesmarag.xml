@@ -4,6 +4,7 @@
       <w>ghmm</w>
       <w>kesmarag</w>
       <w>softmax</w>
+      <w>tanh</w>
       <w>welch</w>
     </words>
   </dictionary>

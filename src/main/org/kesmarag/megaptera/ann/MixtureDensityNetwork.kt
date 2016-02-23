@@ -59,13 +59,21 @@ class MixtureDensityNetwork {
                                 batchSize: Int,
                                 steps: Int,
                                 lambda: Double,
-                                learning: Int){
+                                learning: Int,
+                                l2parameter: Double ,
+                                offset: Int ){
         var lambdaLocal = lambda
         var bool = true
         val dataSize = data.size
         val length = data[0].length
-        val epsilon = 0.001 // checking the derivatives using finite differences
-        val l2 = 0.0001
+        //val epsilon = 0.001 // checking the derivatives using finite differences
+        val l2 = l2parameter
+        var decreasingFactor = 1.0
+        var W1Best = DenseMatrix(hidden, inputs)
+        val dim = (outputs * outputs + 3 * outputs + 2) * mixtures / 2
+        var W2Best = DenseMatrix(dim, hidden)
+        var best = 100.0
+        var error = 100.0
         for (s in 1..steps){
             var dEdW1 = DenseMatrix(hidden, inputs)
             var dEdW2 = DenseMatrix((outputs * outputs + 3 * outputs + 2) * mixtures / 2, hidden)
@@ -91,6 +99,7 @@ class MixtureDensityNetwork {
                 val tmp = W2.t() * d2
                 for (i in 0..hidden - 1) {
                     //d1[i] = tmp[i] * sigmoid(a1[i]) * (1 - sigmoid(a1[i]))
+                    // derivative of the activation function tanhBased
                     d1[i] = tmp[i] * (1.7159-tanhBased(a1[i])*tanhBased(a1[i])/1.7159)*2.0/3.0
                 }
                 for (i in 0..hidden - 1) {
@@ -123,16 +132,27 @@ class MixtureDensityNetwork {
                 }
 
             }
-            W1 = W1 - dEdW1 *(lambdaLocal/batchSize.toDouble())*(learning.toDouble()/(learning.toDouble()+s.toDouble()))
-            W2 = W2 - dEdW2 * (lambdaLocal/batchSize.toDouble())*(learning.toDouble()/(learning.toDouble()+s.toDouble()))
-            //println((lambda/batchSize.toDouble())*(learning.toDouble()/(learning.toDouble()+s.toDouble())))
-            println(this.error(data[841].data.toColumnVector(),targets[841].data.toColumnVector()))
-            //println(W2)
-            if (this.error(data[841].data.toColumnVector(),targets[841].data.toColumnVector())<0 && bool == true) {
-                lambdaLocal *= 0.1
-                bool = false
+            if (s>offset){
+                decreasingFactor = learning.toDouble()/(learning.toDouble()+(s-offset).toDouble())
             }
+            println("factor = $decreasingFactor")
+            //W1 = W1 - dEdW1 *(lambdaLocal/batchSize.toDouble())*decreasingFactor
+            W1.minusAssign(dEdW1 *(lambdaLocal/batchSize.toDouble())*decreasingFactor)
+            //W2 = W2 - dEdW2 * (lambdaLocal/batchSize.toDouble())*decreasingFactor
+            W2.minusAssign(dEdW2 * (lambdaLocal/batchSize.toDouble())*decreasingFactor)
+            //println((lambda/batchSize.toDouble())*(learning.toDouble()/(learning.toDouble()+s.toDouble())))
+            error = this.error(data[400].data.toColumnVector(),targets[400].data.toColumnVector())
+            if (error < best){
+                W1Best = W1.clone()
+                W2Best = W2.clone()
+                best = error
+            }
+            println(error)
+            //println(W2)
         }
+        W1 = W1Best.clone()
+        W2 = W2Best.clone()
+        println("best Error = $best")
     }
 
     public fun trainingBatchSGD(odata: ObservationSet,
@@ -140,8 +160,10 @@ class MixtureDensityNetwork {
                                 batchSize: Int,
                                 steps: Int,
                                 lambda: Double,
-                                learning: Int){
-        trainingBatchSGD(odata.data,otargets.data,batchSize,steps,lambda,learning)
+                                learning: Int,
+                                l2parameter: Double ,
+                                offset: Int){
+        trainingBatchSGD(odata.data,otargets.data,batchSize,steps,lambda,learning,l2parameter,offset)
 
     }
 
